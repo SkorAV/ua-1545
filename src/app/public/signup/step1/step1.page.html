@@ -1,0 +1,31 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/login"></ion-back-button>
+    </ion-buttons>
+    <ion-title>
+      Реєстрація
+    </ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content fullscreen padding>
+  <div>
+    <h2>1. Реєстраційні дані</h2>
+    <ion-item>
+      <ion-label position="stacked">E-mail</ion-label>
+      <ion-input name="email" clearInput type="email" inputmode="email" required></ion-input>
+    </ion-item>
+    <ion-item>
+      <ion-label position="stacked">Пароль</ion-label>
+      <ion-input name="password" type="password"></ion-input>
+    </ion-item>
+    <ion-item>
+      <ion-label position="stacked">Повторно пароль</ion-label>
+      <ion-input name="password_repeat" type="password"></ion-input>
+    </ion-item>
+    <div class="ion-padding">
+      <p><ion-button routerDirection="forward" routerLink="/signup/step2">Продовжити <ion-icon slot="end" name="arrow-forward"></ion-icon></ion-button></p>
+    </div>
+  </div>
+</ion-content>

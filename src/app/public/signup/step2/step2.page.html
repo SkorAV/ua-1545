@@ -1,0 +1,26 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/signup/step1"></ion-back-button>
+    </ion-buttons>
+    <ion-title>
+      Реєстрація
+    </ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content fullscreen padding>
+  <div>
+    <h2>2. Тип особи</h2>
+    <ion-item>
+      <ion-label position="stacked">Тип особи</ion-label>
+      <ion-select placeholder="Оберіть тип особи" [(ngModel)]="personType">
+        <ion-select-option value="f">Фізична особа</ion-select-option>
+        <ion-select-option value="u">Юридична особа особа</ion-select-option>
+      </ion-select>
+    </ion-item>
+    <div class="ion-padding">
+      <p><ion-button type="button" routerDirection="forward" [routerLink]="getNextStep()" [disabled]="!personType">Продовжити <ion-icon slot="end" name="arrow-forward"></ion-icon></ion-button></p>
+    </div>
+  </div>
+</ion-content>

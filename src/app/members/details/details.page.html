@@ -1,0 +1,32 @@
+<ion-header>
+  <ion-toolbar color="primary">
+    <ion-buttons slot="end">
+      <ion-button (click)="logout()">
+        <ion-icon slot="icon-only" name="log-out"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+    <ion-title>№ {{ appeal.external_id }}</ion-title>
+    <ion-buttons slot="start">
+      <ion-back-button routerLink="/members/dashboard"></ion-back-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content padding>
+  <ion-item>
+    <ion-label position="stacked">Надіслано</ion-label>
+    <ion-text>{{ appeal.created_at }}</ion-text>
+  </ion-item>
+  <ion-item>
+    <ion-label position="stacked">Статус</ion-label>
+    <ion-text>{{ appeal.status }}</ion-text>
+  </ion-item>
+  <ion-item>
+    <ion-label position="stacked">Текст звернення</ion-label>
+    <ion-text>{{ appeal.content }}</ion-text>
+  </ion-item>
+  <ion-item>
+    <ion-label position="stacked">Відповідь</ion-label>
+    <ion-text>{{ appeal.decision }}</ion-text>
+  </ion-item>
+</ion-content>

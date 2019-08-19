@@ -1,0 +1,127 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/signup/step2"></ion-back-button>
+    </ion-buttons>
+    <ion-title>
+      Реєстрація
+    </ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content padding>
+  <h2>3. Дані особи</h2>
+  <ion-item>
+    <ion-label position="stacked">Прізвище</ion-label>
+    <ion-input type="text" required></ion-input>
+  </ion-item>
+  <ion-item>
+    <ion-label position="stacked">Ім’я</ion-label>
+    <ion-input type="text" required></ion-input>
+  </ion-item>
+  <ion-item>
+    <ion-label position="stacked">По батькові</ion-label>
+    <ion-input type="text" required></ion-input>
+  </ion-item>
+  <ion-list lines="none">
+    <ion-list-header>Зона відповідальності</ion-list-header>
+    <ion-item>
+      <ion-label>З технічних питань</ion-label>
+      <ion-checkbox slot="start"></ion-checkbox>
+    </ion-item>
+    <ion-item>
+      <ion-label>З юридичних питань</ion-label>
+      <ion-checkbox slot="start"></ion-checkbox>
+    </ion-item>
+    <ion-item>
+      <ion-label>З бухгалтерських питань</ion-label>
+      <ion-checkbox slot="start"></ion-checkbox>
+    </ion-item>
+    <ion-item>
+      <ion-label>Основний контакт</ion-label>
+      <ion-checkbox slot="start"></ion-checkbox>
+    </ion-item>
+    <ion-item>
+      <ion-label>Додатковий контакт</ion-label>
+      <ion-checkbox slot="start"></ion-checkbox>
+    </ion-item>
+    <ion-item>
+      <ion-label>Терміновий контакт</ion-label>
+      <ion-checkbox slot="start"></ion-checkbox>
+    </ion-item>
+    <ion-item>
+      <ion-label>Інше</ion-label>
+      <ion-checkbox slot="start"></ion-checkbox>
+    </ion-item>
+  </ion-list>
+  <ion-item>
+    <ion-label position="stacked">Назва організації</ion-label>
+    <ion-input type="text" required></ion-input>
+  </ion-item>
+  <ion-item>
+    <ion-label position="stacked">Форма власності</ion-label>
+    <ion-input type="text" required></ion-input>
+  </ion-item>
+  <ion-item>
+    <ion-label position="stacked">ЄДРПОУ</ion-label>
+    <ion-input type="text" required></ion-input>
+  </ion-item>
+  <ion-item>
+    <ion-label position="stacked">№ свідоцтва про державну реєстрацію</ion-label>
+    <ion-input type="text" required></ion-input>
+  </ion-item>
+  <ion-item>
+    <ion-label position="stacked">Індекс юридичної адреси</ion-label>
+    <ion-input type="text" required></ion-input>
+  </ion-item>
+  <ion-item>
+    <ion-label position="stacked">Населений пункт юридичної адреси</ion-label>
+    <ion-input type="text" required></ion-input>
+  </ion-item>
+  <ion-item>
+    <ion-label position="stacked">Вулиця юридичної адреси</ion-label>
+    <ion-input type="text" required></ion-input>
+  </ion-item>
+  <ion-item>
+    <ion-label position="stacked">Будинок юридичної адреси</ion-label>
+    <ion-input type="text" required></ion-input>
+  </ion-item>
+  <ion-item>
+    <ion-label position="stacked">Офіс юридичної адреси</ion-label>
+    <ion-input type="text" required></ion-input>
+  </ion-item>
+  <ion-item>
+    <ion-label>Юридична адреса співпадає з фактичною адресою</ion-label>
+    <ion-checkbox slot="start"></ion-checkbox>
+  </ion-item>
+  <ion-item>
+    <ion-label position="stacked">Індекс фактичної адреси</ion-label>
+    <ion-input type="text" required></ion-input>
+  </ion-item>
+  <ion-item>
+    <ion-label position="stacked">Населений пункт фактичної адреси</ion-label>
+    <ion-input type="text" required></ion-input>
+  </ion-item>
+  <ion-item>
+    <ion-label position="stacked">Вулиця фактичної адреси</ion-label>
+    <ion-input type="text" required></ion-input>
+  </ion-item>
+  <ion-item>
+    <ion-label position="stacked">Будинок фактичної адреси</ion-label>
+    <ion-input type="text" required></ion-input>
+  </ion-item>
+  <ion-item>
+    <ion-label position="stacked">Офіс фактичної адреси</ion-label>
+    <ion-input type="text" required></ion-input>
+  </ion-item>
+  <ion-item>
+    <ion-label position="stacked">Контактний телефон</ion-label>
+    <ion-input type="text"></ion-input>
+  </ion-item>
+  <ion-item>
+    <ion-label position="stacked">Додатковий телефон</ion-label>
+    <ion-input type="text"></ion-input>
+  </ion-item>
+
+  <ion-button type="button" routerDirection="forward" routerLink="/signup/step4">Продовжити <ion-icon slot="end" name="arrow-forward"></ion-icon></ion-button>
+</ion-content>

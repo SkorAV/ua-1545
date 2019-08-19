@@ -1,0 +1,35 @@
+<ion-header>
+  <ion-toolbar color="primary">
+    <ion-buttons slot="end">
+      <ion-button (click)="logout()">
+        <ion-icon slot="icon-only" name="log-out"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+    <ion-title>Звернення</ion-title>
+    <ion-buttons slot="start">
+      <ion-button routerLink="/">
+        <ion-icon slot="icon-only" name="home"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content fullscreen>
+  <ion-list>
+    <ion-item *ngFor="let item of appealsData.collection" (click)="loadDetails(item.id);" button detail="true">
+      <ion-icon slot="end" name="">
+      </ion-icon>
+      <ion-label>
+        <h2>№ звернення: {{ item.external_id }}</h2>
+        <p class="ion-nowrap"><strong>Дата: </strong>{{ item.created_at }}<strong> Статус: </strong>{{ item.status }}</p>
+      </ion-label>
+    </ion-item>
+  </ion-list>
+
+  <ion-infinite-scroll threshold="100px" (ionInfinite)="loadData($event)">
+    <ion-infinite-scroll-content
+      loadingSpinner="bubbles"
+      loadingText="Завантаження...">
+    </ion-infinite-scroll-content>
+  </ion-infinite-scroll>
+</ion-content>
