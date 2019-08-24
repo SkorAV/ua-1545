@@ -1,9 +1,9 @@
 import {Component, OnInit, ViewChild} from '@angular/core';
-import { AuthenticationService } from '../../services/authentication.service';
 import { UkcApiService } from '../../services/ukc-api.service';
 import {IonInfiniteScroll} from '@ionic/angular';
 import {Appeals} from '../../models/appeal';
 import {Router} from '@angular/router';
+import {Subscription} from 'rxjs';
 
 @Component({
   selector: 'app-dashboard',
@@ -11,40 +11,44 @@ import {Router} from '@angular/router';
   styleUrls: ['./dashboard.page.scss'],
 })
 export class DashboardPage implements OnInit {
-  appealsData: Appeals;
+  appealsData = [];
+  metaData: any;
+  pageNumber = 1;
 
   @ViewChild(IonInfiniteScroll, {static: false}) infiniteScroll: IonInfiniteScroll;
 
-  constructor(private authService: AuthenticationService, public apiService: UkcApiService, private router: Router) {
-    this.appealsData = new Appeals();
+  constructor(private apiService: UkcApiService, private router: Router) {
   }
 
   ngOnInit() {
-    this.getAllAppeals();
+    this.getAppeals();
   }
 
-  getAllAppeals(page: number = 1) {
-    this.apiService.getAppeals(page).subscribe(response => {
-      console.log(response);
-      this.appealsData = response;
+  getAppeals(event?) {
+    this.apiService.getAppeals(this.pageNumber).subscribe(response => {
+      this.appealsData = this.appealsData.concat(response.collection);
+      this.metaData = response.meta;
+      if (event) {
+        event.target.complete();
+      }
     });
   }
 
-  logout() {
-    this.authService.logout();
+  loadPageData(event) {
+    if (this.pageNumber >= this.metaData.pagesCount) {
+      event.target.disabled = true;
+      return;
+    }
+
+    this.pageNumber++;
+    this.getAppeals(event);
+    console.log('Done');
   }
 
-  loadData($event) {
-    setTimeout(() => {
-      console.log('Done');
-      $event.target.complete();
-
-      // App logic to determine if all data is loaded
-      // and disable the infinite scroll
-      if (this.appealsData.meta.pagesCount == this.appealsData.meta.pageNumber) {
-        $event.target.disabled = true;
-      }
-    }, 500);
+  refresh() {
+    this.appealsData = [];
+    this.pageNumber = 1;
+    this.getAppeals();
   }
 
   loadDetails(id: string) {

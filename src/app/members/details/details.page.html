@@ -1,32 +1,40 @@
 <ion-header>
   <ion-toolbar color="primary">
     <ion-buttons slot="end">
-      <ion-button (click)="logout()">
+      <ion-button (click)="apiService.logout()">
         <ion-icon slot="icon-only" name="log-out"></ion-icon>
       </ion-button>
     </ion-buttons>
-    <ion-title>№ {{ appeal.external_id }}</ion-title>
+    <ion-title>№ {{ appeal?.external_id }}</ion-title>
     <ion-buttons slot="start">
       <ion-back-button routerLink="/members/dashboard"></ion-back-button>
     </ion-buttons>
   </ion-toolbar>
 </ion-header>
 
-<ion-content padding>
+<ion-content padding *ngIf="appeal">
   <ion-item>
-    <ion-label position="stacked">Надіслано</ion-label>
-    <ion-text>{{ appeal.created_at }}</ion-text>
+    <ion-label>
+       <h3>Надіслано</h3>
+       <p>{{ apiService.formatDateTime(appeal?.created_at * 1000, 'yyyy/MM/dd HH:mm') }}</p>
+    </ion-label>
   </ion-item>
   <ion-item>
-    <ion-label position="stacked">Статус</ion-label>
-    <ion-text>{{ appeal.status }}</ion-text>
+    <ion-label>
+       <h3>Статус</h3>
+       <p>{{ appeal?.status }}</p>
+    </ion-label>
   </ion-item>
   <ion-item>
-    <ion-label position="stacked">Текст звернення</ion-label>
-    <ion-text>{{ appeal.content }}</ion-text>
+    <ion-label>
+        <h3>Текст звернення</h3>
+        <p class="ion-text-wrap">{{ appeal?.content }}</p>
+    </ion-label>
   </ion-item>
   <ion-item>
-    <ion-label position="stacked">Відповідь</ion-label>
-    <ion-text>{{ appeal.decision }}</ion-text>
+    <ion-label>
+        <h3>Відповідь</h3>
+        <p class="ion-text-wrap">{{ appeal?.decision }}</p>
+    </ion-label>
   </ion-item>
 </ion-content>

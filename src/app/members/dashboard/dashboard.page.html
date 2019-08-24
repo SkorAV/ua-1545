@@ -1,7 +1,7 @@
 <ion-header>
   <ion-toolbar color="primary">
     <ion-buttons slot="end">
-      <ion-button (click)="logout()">
+      <ion-button (click)="apiService.logout()">
         <ion-icon slot="icon-only" name="log-out"></ion-icon>
       </ion-button>
     </ion-buttons>
@@ -16,20 +16,24 @@
 
 <ion-content fullscreen>
   <ion-list>
-    <ion-item *ngFor="let item of appealsData.collection" (click)="loadDetails(item.id);" button detail="true">
-      <ion-icon slot="end" name="">
-      </ion-icon>
+    <ion-item *ngFor="let item of this.appealsData" (click)="loadDetails(item.id);" button detail="true">
       <ion-label>
         <h2>№ звернення: {{ item.external_id }}</h2>
-        <p class="ion-nowrap"><strong>Дата: </strong>{{ item.created_at }}<strong> Статус: </strong>{{ item.status }}</p>
+        <p class="ion-nowrap"><strong>Дата: </strong>{{ apiService.formatDateTime(item.created_at * 1000, 'yyyy/MM/dd') }}<strong> Статус: </strong>{{ item.status ? item.status : "Не визначено" }}</p>
       </ion-label>
     </ion-item>
   </ion-list>
 
-  <ion-infinite-scroll threshold="100px" (ionInfinite)="loadData($event)">
+  <ion-infinite-scroll threshold="100px" (ionInfinite)="loadPageData($event)">
     <ion-infinite-scroll-content
-      loadingSpinner="bubbles"
-      loadingText="Завантаження...">
+            loadingSpinner="bubbles"
+            loadingText="Завантаження...">
     </ion-infinite-scroll-content>
   </ion-infinite-scroll>
+
+  <ion-fab horizontal="end" vertical="bottom" slot="fixed">
+    <ion-fab-button color="primary">
+      <ion-icon name="refresh" (click)="refresh()"></ion-icon>
+    </ion-fab-button>
+  </ion-fab>
 </ion-content>

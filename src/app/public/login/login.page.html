@@ -4,48 +4,40 @@
   </ion-toolbar>
 </ion-header>
 
-<ion-content padding>
-  <ion-list lines="none">
+<ion-content padding *ngIf="!authService.isAuthenticated()">
+  <ion-item>
+    <ion-label>
+      <p>Увійдіть або <a routerLink="/signup/step1" routerDirection="forward">Зареєструйтеся</a></p>
+      <p *ngIf="submitAttempt" style="color: #ea6153;">Будь-ласка, заповніть всі необхідні дані</p>
+    </ion-label>
+  </ion-item>
+  <form>
     <ion-item>
-      <ion-thumbnail slot="start">
-        <ion-img src="assets/images/img_01.svg"></ion-img>
-      </ion-thumbnail>
+      <ion-label position="stacked">E-mail</ion-label>
+      <ion-input clearInput type="email" inputmode="email" #email></ion-input>
+    </ion-item>
+    <ion-item>
+      <ion-label position="stacked">Пароль</ion-label>
+      <ion-input type="password" #password></ion-input>
+    </ion-item>
+    <ion-grid>
+      <ion-row>
+        <ion-col>
+          <ion-button expand="block" type="submit" (click)="authService.login(email.value, password.value);">Увійти</ion-button>
+        </ion-col>
+        <ion-col class="ion-text-center ion-align-items-baseline">
+          <a routerLink="/restore">Забули пароль?</a>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+  </form>
+</ion-content>
+<ion-content padding *ngIf="authService.isAuthenticated()">
+    <ion-item>
       <ion-label>
-        <h1>Крок 1</h1>
+        <p>Ви увійшли як {{authService.getUserProfile()?.username}}</p>
+        <p><a (click)="authService.logout()">Вийти</a></p>
       </ion-label>
+      <ion-button expand="block" routerLink="/members/dashboard" routerDirection="forward">Особистий кабінет</ion-button>
     </ion-item>
-    <p>Увійдіть або <a routerLink="/signup/step1" routerDirection="forward">Зареєструйтеся</a></p>
-    <p *ngIf="submitAttempt" style="color: #ea6153;">Будь-ласка, заповніть всі необхідні дані</p>
-    <form>
-      <ion-item>
-        <ion-label position="stacked">E-mail</ion-label>
-        <ion-input clearInput type="email" inputmode="email" #email></ion-input>
-      </ion-item>
-      <ion-item>
-        <ion-label position="stacked">Пароль</ion-label>
-        <ion-input type="password" #password></ion-input>
-      </ion-item>
-      <ion-grid>
-        <ion-row>
-          <ion-col>
-            <ion-button expand="block" type="submit" (click)="login(email.value, password.value);">Увійти</ion-button>
-          </ion-col>
-          <ion-col class="ion-text-center ion-padding-vertical">
-            <a href="/restore">Забули пароль?</a>
-          </ion-col>
-        </ion-row>
-      </ion-grid>
-    </form>
-  </ion-list>
-  <ion-list *ngIf="authorised" lines="none">
-    <ion-item>
-      Ви увійшли як {{username}}
-    </ion-item>
-    <ion-item>
-      <a (click)="logout()">Вийти</a>
-    </ion-item>
-    <ion-item>
-      <ion-button expand="block" href="/kabinet">Особистий кабінет</ion-button>
-    </ion-item>
-  </ion-list>
 </ion-content>
