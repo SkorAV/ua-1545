@@ -1,8 +1,8 @@
 <ion-header>
   <ion-toolbar color="primary">
     <ion-buttons slot="end">
-      <ion-button (click)="apiService.logout()">
-        <ion-icon slot="icon-only" name="log-out"></ion-icon>
+      <ion-button routerLink="/members/profile">
+        <ion-icon slot="icon-only" name="person"></ion-icon>
       </ion-button>
     </ion-buttons>
     <ion-title>№ {{ appeal?.external_id }}</ion-title>
@@ -37,4 +37,10 @@
         <p class="ion-text-wrap">{{ appeal?.decision }}</p>
     </ion-label>
   </ion-item>
+
+  <ion-fab horizontal="end" vertical="bottom" slot="fixed">
+    <ion-fab-button color="primary">
+        <ion-icon name="refresh" (click)="refresh()"></ion-icon>
+    </ion-fab-button>
+  </ion-fab>
 </ion-content>

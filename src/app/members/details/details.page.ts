@@ -19,4 +19,8 @@ export class DetailsPage implements OnInit {
       this.appeal = response.model;
     });
   }
+
+  refresh() {
+    this.ngOnInit();
+  }
 }

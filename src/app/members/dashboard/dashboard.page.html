@@ -1,11 +1,11 @@
 <ion-header>
   <ion-toolbar color="primary">
     <ion-buttons slot="end">
-      <ion-button (click)="apiService.logout()">
-        <ion-icon slot="icon-only" name="log-out"></ion-icon>
+      <ion-button routerLink="/members/profile">
+        <ion-icon slot="icon-only" name="person"></ion-icon>
       </ion-button>
     </ion-buttons>
-    <ion-title>Звернення</ion-title>
+    <ion-title>Мої звернення</ion-title>
     <ion-buttons slot="start">
       <ion-button routerLink="/">
         <ion-icon slot="icon-only" name="home"></ion-icon>
@@ -15,8 +15,21 @@
 </ion-header>
 
 <ion-content fullscreen>
+  <ion-grid>
+    <ion-row>
+      <ion-col>
+        <ion-input type="text" placeholder="Пошук" (ionChange)="this.setNumberFilter($event)"></ion-input>
+      </ion-col>
+      <ion-col>
+        <ion-select (ionChange)="this.setStatusFilter($event)" placeholder="Статус" cancel-text="Відміна" [interfaceOptions]="{ header: 'Статус' }" value="">
+          <ion-select-option *ngFor="let appealStatus of this.appealsStatuses" [value]="appealStatus.value">{{ appealStatus.label }}</ion-select-option>
+        </ion-select>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+
   <ion-list>
-    <ion-item *ngFor="let item of this.appealsData" (click)="loadDetails(item.id);" button detail="true">
+    <ion-item *ngFor="let item of this.filterAppeals()" (click)="loadDetails(item.id);" button detail="true">
       <ion-label>
         <h2>№ звернення: {{ item.external_id }}</h2>
         <p class="ion-nowrap"><strong>Дата: </strong>{{ apiService.formatDateTime(item.created_at * 1000, 'yyyy/MM/dd') }}<strong> Статус: </strong>{{ item.status ? item.status : "Не визначено" }}</p>
@@ -24,7 +37,7 @@
     </ion-item>
   </ion-list>
 
-  <ion-infinite-scroll threshold="100px" (ionInfinite)="loadPageData($event)">
+  <ion-infinite-scroll threshold="50px" (ionInfinite)="loadPageData($event)">
     <ion-infinite-scroll-content
             loadingSpinner="bubbles"
             loadingText="Завантаження...">

@@ -1,16 +1,17 @@
 <ion-header>
-  <ion-toolbar>
+  <ion-toolbar color="primary">
     <ion-title>Авторизація</ion-title>
   </ion-toolbar>
 </ion-header>
 
-<ion-content padding *ngIf="!authService.isAuthenticated()">
-  <ion-item>
-    <ion-label>
-      <p>Увійдіть або <a routerLink="/signup/step1" routerDirection="forward">Зареєструйтеся</a></p>
-      <p *ngIf="submitAttempt" style="color: #ea6153;">Будь-ласка, заповніть всі необхідні дані</p>
-    </ion-label>
-  </ion-item>
+<ion-content padding *ngIf="!apiService.isAuthenticated()">
+  <ion-grid>
+    <ion-row>
+      <ion-col>
+        <p>Увійдіть або <a routerLink="/signup/step1" routerDirection="forward">Зареєструйтеся</a></p>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
   <form>
     <ion-item>
       <ion-label position="stacked">E-mail</ion-label>
@@ -23,21 +24,27 @@
     <ion-grid>
       <ion-row>
         <ion-col>
-          <ion-button expand="block" type="submit" (click)="authService.login(email.value, password.value);">Увійти</ion-button>
+          <ion-button expand="block" type="submit" (click)="apiService.login(email.value, password.value);">Увійти</ion-button>
         </ion-col>
-        <ion-col class="ion-text-center ion-align-items-baseline">
+        <ion-col class="ion-padding-vertical">
           <a routerLink="/restore">Забули пароль?</a>
         </ion-col>
       </ion-row>
     </ion-grid>
   </form>
 </ion-content>
-<ion-content padding *ngIf="authService.isAuthenticated()">
-    <ion-item>
-      <ion-label>
-        <p>Ви увійшли як {{authService.getUserProfile()?.username}}</p>
-        <p><a (click)="authService.logout()">Вийти</a></p>
-      </ion-label>
-      <ion-button expand="block" routerLink="/members/dashboard" routerDirection="forward">Особистий кабінет</ion-button>
-    </ion-item>
+<ion-content padding *ngIf="apiService.isAuthenticated()">
+  <ion-grid>
+    <ion-row>
+      <ion-col>
+        <p>Ви увійшли як {{ profile?.name + " " + profile?.surname }}</p>
+        <a (click)="apiService.logout()">Вийти</a>
+      </ion-col>
+    </ion-row>
+      <ion-row>
+        <ion-col>
+          <ion-button expand="block" routerLink="/members/dashboard" routerDirection="forward">Особистий кабінет</ion-button>
+        </ion-col>
+      </ion-row>
+  </ion-grid>
 </ion-content>

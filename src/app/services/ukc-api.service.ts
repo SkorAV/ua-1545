@@ -10,6 +10,7 @@ import {Platform} from '@ionic/angular';
 import {Storage} from '@ionic/storage';
 import {Profile} from '../models/profile';
 import {formatDate} from '@angular/common';
+import {AppealStatuses} from '../models/appeal-status';
 
 // storage keys
 const TOKEN_KEY = 'auth-token';
@@ -19,8 +20,10 @@ const USER_PROFILE_KEY = 'user-profile';
 const API_URL = 'https://ukc.gov.ua/backend/api/';
 const AUTH_URL = 'auth/login';
 const APPEALS_URL = 'requests';
-const APPEAL_DETAILS_URL = 'requests/view/';
+const APPEAL_STATUSES_URL = 'requests/statuses';
+const APPEAL_DETAILS_URL = 'requests/view';
 const PROFILE_URL = 'profile';
+const APPEAL_TYPES_TREE_URL = 'misc/appeal-types-tree';
 
 @Injectable({
   providedIn: 'root'
@@ -34,6 +37,7 @@ export class UkcApiService {
   constructor(private http: HttpClient, private storage: Storage, private plt: Platform) {
     this.plt.ready().then(() => {
       this.checkToken();
+      this.getUserProfileFromStorage();
     });
   }
 
@@ -49,8 +53,7 @@ export class UkcApiService {
     return this.http
       .post<Token>(API_URL + AUTH_URL, {email, password})
       .pipe(
-        retry(2),
-        catchError(handleError)
+        retry(2)
       );
   }
 
@@ -100,8 +103,7 @@ export class UkcApiService {
     return this.http
       .get<Appeals>(API_URL + APPEALS_URL + '?page=' + page + '&per-page=11')
       .pipe(
-        retry(2),
-        catchError(handleError)
+        retry(2)
       );
   }
 
@@ -109,8 +111,23 @@ export class UkcApiService {
     return this.http
       .get<Model>(API_URL + APPEAL_DETAILS_URL  + appealId)
       .pipe(
-        retry(2),
-        catchError(handleError)
+        retry(2)
+      );
+  }
+
+  getAppealsStatuses(): Observable<AppealStatuses> {
+    return this.http
+      .get<AppealStatuses>(API_URL + APPEAL_STATUSES_URL)
+      .pipe(
+        retry(2)
+      );
+  }
+
+  getAppealTypesTree() {
+    return this.http
+      .get<any>(API_URL + APPEAL_TYPES_TREE_URL)
+      .pipe(
+        retry(2)
       );
   }
 
@@ -122,8 +139,7 @@ export class UkcApiService {
     return this.http
       .get<Model>(API_URL + PROFILE_URL)
       .pipe(
-        retry(2),
-        catchError(handleError)
+        retry(2)
       );
   }
 
@@ -141,7 +157,7 @@ export class UkcApiService {
   }
 
   private deleteUserProfileFromStorage() {
-    this.storage.remove(USER_PROFILE_KEY);
+    return this.storage.remove(USER_PROFILE_KEY);
   }
 
   getUserProfile() {
