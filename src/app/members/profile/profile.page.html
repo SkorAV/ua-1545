@@ -1,9 +1,53 @@
 <ion-header>
   <ion-toolbar color="primary">
     <ion-title>Профіль</ion-title>
+    <ion-buttons slot="start">
+      <ion-back-button routerLink="/members/dashboard"></ion-back-button>
+    </ion-buttons>
   </ion-toolbar>
 </ion-header>
 
-<ion-content>
-
+<ion-content padding>
+  <ion-segment #pageSelect value="personal">
+    <ion-segment-button value="registration">
+      <ion-label>Реєстраційні дані</ion-label>
+    </ion-segment-button>
+    <ion-segment-button value="personal">
+      <ion-label>Особисті дані</ion-label>
+    </ion-segment-button>
+  </ion-segment>
+  <ion-list *ngIf="pageSelect.value === 'registration'">
+    <ion-label position="stacked">
+      <h3>Email</h3>
+    </ion-label>
+    <ion-item lines="none">
+      <p>{{ me?.email }}</p>
+    </ion-item>
+    <section>
+      <ion-button expand="block" (click)="passwordChangeVisible = true">Змінити пароль</ion-button>
+    </section>
+  </ion-list>
+  <ion-list *ngIf="pageSelect.value === 'personal'">
+    <ion-item>
+      Особисті дані
+    </ion-item>
+  </ion-list>
+  <ion-list *ngIf="passwordChangeVisible">
+    <ion-label position="stacked">
+      <h3>Новий пароль</h3>
+    </ion-label>
+    <ion-item lines="none">
+      <ion-input type="password" [ngModel]="password"></ion-input>
+    </ion-item>
+    <ion-label position="stacked">
+      <h3>Повторно пароль</h3>
+    </ion-label>
+    <ion-item lines="none">
+      <ion-input type="password" [ngModel]="passwordRepeat"></ion-input>
+    </ion-item>
+    <section>
+      <ion-button (click)="savePassword()">Зберегти</ion-button>
+      <ion-button (click)="passwordChangeVisible = false">Відмінити</ion-button>
+    </section>
+  </ion-list>
 </ion-content>

@@ -12,27 +12,35 @@
       </ion-button>
     </ion-buttons>
   </ion-toolbar>
+  <ion-toolbar>
+    <ion-grid>
+      <ion-row>
+        <ion-col>
+          <ion-button routerLink="/members/new-appeal">Створити звернення</ion-button>
+        </ion-col>
+      </ion-row>
+      <ion-row>
+        <ion-col>
+          <ion-input type="text" placeholder="Пошук" (ionChange)="this.setNumberFilter($event)"></ion-input>
+        </ion-col>
+        <ion-col>
+          <ion-select (ionChange)="this.setStatusFilter($event)" placeholder="Статус" cancel-text="Відміна" [interfaceOptions]="{ header: 'Статус' }" value="">
+            <ion-select-option *ngFor="let appealStatus of this.appealsStatuses" [value]="appealStatus.value">{{ appealStatus.label }}</ion-select-option>
+          </ion-select>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+  </ion-toolbar>
 </ion-header>
 
-<ion-content fullscreen>
-  <ion-grid>
-    <ion-row>
-      <ion-col>
-        <ion-input type="text" placeholder="Пошук" (ionChange)="this.setNumberFilter($event)"></ion-input>
-      </ion-col>
-      <ion-col>
-        <ion-select (ionChange)="this.setStatusFilter($event)" placeholder="Статус" cancel-text="Відміна" [interfaceOptions]="{ header: 'Статус' }" value="">
-          <ion-select-option *ngFor="let appealStatus of this.appealsStatuses" [value]="appealStatus.value">{{ appealStatus.label }}</ion-select-option>
-        </ion-select>
-      </ion-col>
-    </ion-row>
-  </ion-grid>
-
+<ion-content no-padding>
   <ion-list>
-    <ion-item *ngFor="let item of this.filterAppeals()" (click)="loadDetails(item.id);" button detail="true">
+    <ion-item *ngFor="let item of this.filterAppeals()" (click)="loadDetails(item.id);" button detail>
       <ion-label>
         <h2>№ звернення: {{ item.external_id }}</h2>
-        <p class="ion-nowrap"><strong>Дата: </strong>{{ apiService.formatDateTime(item.created_at * 1000, 'yyyy/MM/dd') }}<strong> Статус: </strong>{{ item.status ? item.status : "Не визначено" }}</p>
+        <p class="ion-nowrap"><strong>Дата: </strong>{{ apiService.formatDateTime(item.created_at * 1000, 'yyyy/MM/dd') }}</p>
+        <p class="ion-nowrap"><strong>Розподілено: </strong>{{ item.destination }}</p>
+        <p class="ion-nowrap"><strong>Статус: </strong>{{ item.status ? item.status : "Не визначено" }}</p>
       </ion-label>
     </ion-item>
   </ion-list>

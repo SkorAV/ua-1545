@@ -1,9 +1,8 @@
 import {Injectable} from '@angular/core';
-import {HttpClient, HttpHeaders} from '@angular/common/http';
+import {HttpClient} from '@angular/common/http';
 import {BehaviorSubject, Observable} from 'rxjs';
 import {Appeals} from '../models/appeal';
-import {handleError} from './error-handler.service';
-import {catchError, retry} from 'rxjs/operators';
+import {retry} from 'rxjs/operators';
 import {Model} from '../models/model';
 import {Token} from '../models/token';
 import {Platform} from '@ionic/angular';
@@ -11,6 +10,8 @@ import {Storage} from '@ionic/storage';
 import {Profile} from '../models/profile';
 import {formatDate} from '@angular/common';
 import {AppealStatuses} from '../models/appeal-status';
+import {AppealType} from '../models/appeal-type';
+import {AppealLocations} from '../models/appeal-locations';
 
 // storage keys
 const TOKEN_KEY = 'auth-token';
@@ -21,9 +22,11 @@ const API_URL = 'https://ukc.gov.ua/backend/api/';
 const AUTH_URL = 'auth/login';
 const APPEALS_URL = 'requests';
 const APPEAL_STATUSES_URL = 'requests/statuses';
-const APPEAL_DETAILS_URL = 'requests/view';
+const APPEAL_DETAILS_URL = 'requests/view/';
 const PROFILE_URL = 'profile';
+const ME_URL = 'profile/me';
 const APPEAL_TYPES_TREE_URL = 'misc/appeal-types-tree';
+const LOCATIONS_CITIES_URL = 'locations/cities';
 
 @Injectable({
   providedIn: 'root'
@@ -109,7 +112,7 @@ export class UkcApiService {
 
   getAppeal(appealId: any): Observable<Model> {
     return this.http
-      .get<Model>(API_URL + APPEAL_DETAILS_URL  + appealId)
+      .get<Model>(API_URL + APPEAL_DETAILS_URL + appealId)
       .pipe(
         retry(2)
       );
@@ -125,7 +128,7 @@ export class UkcApiService {
 
   getAppealTypesTree() {
     return this.http
-      .get<any>(API_URL + APPEAL_TYPES_TREE_URL)
+      .get<AppealType[]>(API_URL + APPEAL_TYPES_TREE_URL)
       .pipe(
         retry(2)
       );
@@ -162,5 +165,22 @@ export class UkcApiService {
 
   getUserProfile() {
     return this.profile;
+  }
+
+  // LOCATIONS
+  getLocations(filter: string) {
+    return this.http
+      .get<AppealLocations>(API_URL + LOCATIONS_CITIES_URL + '?query=' + filter)
+      .pipe(
+        retry(2)
+      );
+  }
+
+  getMe() {
+    return this.http
+      .get<Model>(API_URL + ME_URL)
+      .pipe(
+        retry(2)
+      );
   }
 }

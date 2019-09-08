@@ -58,7 +58,8 @@ export class HttpInterceptorService implements HttpInterceptor {
 
   showLoader() {
     this.loaderToShow = this.loadingController.create({
-      message: 'Завантаження...'
+      message: 'Завантаження...',
+      duration: 10000
     }).then((res) => {
       res.present();
       this.isShowing = true;

@@ -1,16 +1,16 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import {FormsModule, ReactiveFormsModule} from '@angular/forms';
+import { FormsModule } from '@angular/forms';
 import { Routes, RouterModule } from '@angular/router';
 
 import { IonicModule } from '@ionic/angular';
 
-import { NewAppealPage } from './new-appeal.page';
+import { Level4Page } from './level4.page';
 
 const routes: Routes = [
   {
     path: '',
-    component: NewAppealPage
+    component: Level4Page
   }
 ];
 
@@ -19,9 +19,8 @@ const routes: Routes = [
     CommonModule,
     FormsModule,
     IonicModule,
-    RouterModule.forChild(routes),
-    ReactiveFormsModule
+    RouterModule.forChild(routes)
   ],
-  declarations: [NewAppealPage]
+  declarations: [Level4Page]
 })
-export class NewAppealPageModule {}
+export class Level4PageModule {}
