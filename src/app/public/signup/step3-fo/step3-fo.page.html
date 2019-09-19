@@ -10,148 +10,160 @@
 </ion-header>
 
 <ion-content padding>
-  <h2>3. Дані особи</h2>
-  <ion-item>
-    <ion-label position="stacked">Прізвище</ion-label>
-    <ion-input type="text" required></ion-input>
-  </ion-item>
-  <ion-item>
-    <ion-label position="stacked">Ім’я</ion-label>
-    <ion-input type="text" required></ion-input>
-  </ion-item>
-  <ion-item>
-    <ion-label position="stacked">По батькові</ion-label>
-    <ion-input type="text" required></ion-input>
-  </ion-item>
-  <ion-item>
-    <ion-label position="stacked">Стать</ion-label>
-    <ion-select placeholder="Оберіть">
-      <ion-select-option>Чоловік</ion-select-option>
-      <ion-select-option>Жінка</ion-select-option>
-    </ion-select>
-  </ion-item>
-  <ion-item>
-    <ion-label position="stacked">Контактний телефон</ion-label>
-    <ion-input type="text"></ion-input>
-  </ion-item>
-  <ion-item>
-    <ion-label position="stacked">Додатковий телефон</ion-label>
-    <ion-input type="text"></ion-input>
-  </ion-item>
-  <ion-item>
-    <ion-label position="stacked">Соціальний стан</ion-label>
-    <ion-select placeholder="Оберіть">
-      <ion-select-option>Не визначено</ion-select-option>
-      <ion-select-option>Пенсіонер</ion-select-option>
-    </ion-select>
-  </ion-item>
-  <ion-list lines="none">
-    <ion-list-header>Категорія</ion-list-header>
-    <ion-item>
-      <ion-label wrap>Учасник війни</ion-label>
-      <ion-checkbox slot="start"></ion-checkbox>
-    </ion-item>
-    <ion-item>
-      <ion-label>Мати-героїня</ion-label>
-      <ion-checkbox slot="start"></ion-checkbox>
-    </ion-item>
-    <ion-item>
-      <ion-label>Багатодітна сім'я</ion-label>
-      <ion-checkbox slot="start"></ion-checkbox>
-    </ion-item>
-    <ion-item>
-      <ion-label wrap>Особа, що потерпіла від Чорнобильської катастрофи</ion-label>
-      <ion-checkbox slot="start"></ion-checkbox>
-    </ion-item>
-    <ion-item>
-      <ion-label wrap>Учасник ліквідації наслідків аварії на Чорнобильській АЕС</ion-label>
-      <ion-checkbox slot="start"></ion-checkbox>
-    </ion-item>
-    <ion-item>
-      <ion-label>Герой України</ion-label>
-      <ion-checkbox slot="start"></ion-checkbox>
-    </ion-item>
-    <ion-item>
-      <ion-label>Герой Радянського Союзу</ion-label>
-      <ion-checkbox slot="start"></ion-checkbox>
-    </ion-item>
-    <ion-item>
-      <ion-label>Герой Соціалістичної Праці</ion-label>
-      <ion-checkbox slot="start"></ion-checkbox>
-    </ion-item>
-    <ion-item>
-      <ion-label>Дитина</ion-label>
-      <ion-checkbox slot="start"></ion-checkbox>
-    </ion-item>
-    <ion-item>
-      <ion-label>Одинока мати</ion-label>
-      <ion-checkbox slot="start"></ion-checkbox>
-    </ion-item>
-    <ion-item>
-      <ion-label>Дитина з інвалідністю</ion-label>
-      <ion-checkbox slot="start"></ion-checkbox>
-    </ion-item>
-    <ion-item>
-      <ion-label>Особа з інвалідністю III групи</ion-label>
-      <ion-checkbox slot="start"></ion-checkbox>
-    </ion-item>
-    <ion-item>
-      <ion-label>Дитина війни</ion-label>
-      <ion-checkbox slot="start"></ion-checkbox>
-    </ion-item>
-    <ion-item wrap>
-      <ion-label>Особа з інвалідністю внаслідок Другої світової війни</ion-label>
-      <ion-checkbox slot="start"></ion-checkbox>
-    </ion-item>
-    <ion-item wrap>
-      <ion-label>Особа з інвалідністю внаслідок війни</ion-label>
-      <ion-checkbox slot="start"></ion-checkbox>
-    </ion-item>
-    <ion-item>
-      <ion-label>Учасник бойових дій</ion-label>
-      <ion-checkbox slot="start"></ion-checkbox>
-    </ion-item>
-    <ion-item>
-      <ion-label>Ветеран праці</ion-label>
-      <ion-checkbox slot="start"></ion-checkbox>
-    </ion-item>
-    <ion-item>
-      <ion-label>Ветеран військової служби</ion-label>
-      <ion-checkbox slot="start"></ion-checkbox>
-    </ion-item>
-    <ion-item>
-      <ion-label>Особа з інвалідністю I групи</ion-label>
-      <ion-checkbox slot="start"></ion-checkbox>
-    </ion-item>
-    <ion-item>
-      <ion-label>Особа з інвалідністю II групи</ion-label>
-      <ion-checkbox slot="start"></ion-checkbox>
-    </ion-item>
-    <ion-item>
-      <ion-label>Інші категорії</ion-label>
-      <ion-checkbox slot="start"></ion-checkbox>
-    </ion-item>
-  </ion-list>
-  <ion-item>
-    <ion-label position="stacked">Індекс</ion-label>
-    <ion-input type="text" required></ion-input>
-  </ion-item>
-  <ion-item>
-    <ion-label position="stacked">Населений пункт</ion-label>
-    <ion-input type="text" required></ion-input>
-  </ion-item>
-  <ion-item>
-    <ion-label position="stacked">Вулиця</ion-label>
-    <ion-input type="text" required></ion-input>
-  </ion-item>
-  <ion-item>
-    <ion-label position="stacked">Будинок</ion-label>
-    <ion-input type="text" required></ion-input>
-  </ion-item>
-  <ion-item>
-    <ion-label position="stacked">Квартира</ion-label>
-    <ion-input type="text" required></ion-input>
-  </ion-item>
-
-  <ion-button type="button" routerDirection="forward" routerLink="/signup/step4">Продовжити <ion-icon slot="end" name="arrow-forward"></ion-icon></ion-button>
+  <form [formGroup]="form" (ngSubmit)="step4(form.value)">
+    <ion-list lines="none">
+      <h4>3. Дані особи</h4>
+      <ion-item>
+        <ion-label position="floating">Прізвище</ion-label>
+        <ion-input type="text" formControlName="surname" (ionChange)="clearError()"></ion-input>
+      </ion-item>
+      <p class="validation-error" *ngIf="error && error.surname">{{ error.surname }}</p>
+      <div class="validation-errors">
+        <ng-container *ngFor="let validation of validationErrors.surname">
+          <p class="validation-error" *ngIf="form.get('surname').hasError(validation.type) && (form.get('surname').dirty || form.get('surname').touched)">
+            {{ validation.message }}
+          </p>
+        </ng-container>
+      </div>
+      <ion-item>
+        <ion-label position="floating">Ім’я</ion-label>
+        <ion-input type="text" formControlName="name" (ionChange)="clearError()"></ion-input>
+      </ion-item>
+      <p class="validation-error" *ngIf="error && error.name">{{ error.name }}</p>
+      <div class="validation-errors">
+        <ng-container *ngFor="let validation of validationErrors.name">
+          <p class="validation-error" *ngIf="form.get('name').hasError(validation.type) && (form.get('name').dirty || form.get('name').touched)">
+            {{ validation.message }}
+          </p>
+        </ng-container>
+      </div>
+      <ion-item>
+        <ion-label position="floating">По батькові</ion-label>
+        <ion-input type="text" formControlName="patronymic" (ionChange)="clearError()"></ion-input>
+      </ion-item>
+      <p class="validation-error" *ngIf="error && error.patronymic">{{ error.patronymic }}</p>
+      <div class="validation-errors">
+        <ng-container *ngFor="let validation of validationErrors.patronymic">
+          <p class="validation-error" *ngIf="form.get('patronymic').hasError(validation.type) && (form.get('patronymic').dirty || form.get('patronymic').touched)">
+            {{ validation.message }}
+          </p>
+        </ng-container>
+      </div>
+      <ion-item>
+        <ion-label position="stacked">Стать</ion-label>
+        <ion-select formControlName="gender" cancelText="Відміна" placeholder="Оберіть" (ionChange)="clearError()">
+          <ion-select-option value="MALE">Чоловік</ion-select-option>
+          <ion-select-option value="FEMALE">Жінка</ion-select-option>
+        </ion-select>
+      </ion-item>
+      <div class="validation-errors">
+        <ng-container *ngFor="let validation of validationErrors.gender">
+          <p class="validation-error" *ngIf="form.get('gender').hasError(validation.type) && (form.get('gender').dirty || form.get('gender').touched)">
+            {{ validation.message }}
+          </p>
+        </ng-container>
+      </div>
+      <ion-item>
+        <ion-label position="floating">Контактний телефон</ion-label>
+        <ion-input type="phone" formControlName="phone" (ionChange)="clearError()"></ion-input>
+      </ion-item>
+      <p class="validation-error" *ngIf="error && error.phone">{{ error.phone }}</p>
+      <div class="validation-errors">
+        <ng-container *ngFor="let validation of validationErrors.phone">
+          <p class="validation-error" *ngIf="form.get('phone').hasError(validation.type) && (form.get('phone').dirty || form.get('phone').touched)">
+            {{ validation.message }}
+          </p>
+        </ng-container>
+      </div>
+      <ion-item>
+        <ion-label position="floating">Додатковий телефон</ion-label>
+        <ion-input type="text" formControlName="additional_phone"></ion-input>
+      </ion-item>
+      <ion-item>
+        <ion-label position="stacked">Соціальний стан</ion-label>
+        <ion-select formControlName="social_type" cancelText="Відміна" placeholder="Оберіть">
+          <ion-select-option *ngFor="let socialStatus of socialStatuses">{{ socialStatus }}</ion-select-option>
+        </ion-select>
+      </ion-item>
+      <ion-item>
+        <ion-label position="stacked">Категорія</ion-label>
+        <ion-select formControlName="category" cancel-text="Відміна" multiple placeholder="Оберіть">
+          <ion-select-option *ngFor="let personCategory of personCategories" value="{{ personCategory }}">{{ personCategory }}</ion-select-option>
+        </ion-select>
+      </ion-item>
+      <ion-item>
+        <ion-label position="floating">Індекс</ion-label>
+        <ion-input type="text" formControlName="zip" (ionChange)="clearError()"></ion-input>
+      </ion-item>
+      <p class="validation-error" *ngIf="error && error.zip">{{ error.zip }}</p>
+      <div class="validation-errors">
+        <ng-container *ngFor="let validation of validationErrors.zip">
+          <p class="validation-error" *ngIf="form.get('zip').hasError(validation.type) && (form.get('zip').dirty || form.get('zip').touched)">
+            {{ validation.message }}
+          </p>
+        </ng-container>
+      </div>
+      <ion-item>
+        <ion-label position="floating">Населений пункт</ion-label>
+        <ion-input
+            #locationSelect
+            formControlName="city_text"
+            type="text"
+            debounce="1000"
+            placeholder="Вкажіть населений пункт"
+            (ionChange)="getLocation($event); locationSelect.setFocus();"
+            [value]="getFullLocation(selectedLocation)"
+            (ionBlur)="validateCitySelection()"
+        ></ion-input>
+        <ion-list lines="none" *ngIf="locations.length > 0">
+          <ion-item button detail class="dropdown-list" *ngFor="let location of locations" (click)="selectLocation(location)">
+            <p>{{ getFullLocation(location) }}</p>
+          </ion-item>
+        </ion-list>
+      </ion-item>
+      <p class="validation-error" *ngIf="error && error.city">{{ error.city }}</p>
+      <div class="validation-errors">
+        <ng-container *ngFor="let validation of validationErrors.city_text">
+          <p class="validation-error" *ngIf="form.get('city_text').hasError(validation.type) && (form.get('city_text').dirty || form.get('city_text').touched)">
+            {{ validation.message }}
+          </p>
+        </ng-container>
+      </div>
+      <ion-item>
+        <ion-label position="floating">Вулиця</ion-label>
+        <ion-input
+            #streetSelect
+            formControlName="street_text"
+            type="text"
+            debounce="1000"
+            placeholder="Вкажіть вулицю"
+            (ionChange)="getStreet($event); streetSelect.setFocus();"
+            [value]="selectedStreet?.model.name"
+            (ionBlur)="validateStreetSelection()"
+        ></ion-input>
+        <ion-list lines="none" *ngIf="streets.length > 0">
+          <ion-item button detail class="dropdown-list" *ngFor="let street of streets" (click)="selectStreet(street)">
+            <p>{{ street.model.name }}</p>
+          </ion-item>
+        </ion-list>
+      </ion-item>
+      <p class="validation-error" *ngIf="error && error.street">{{ error.street }}</p>
+      <div class="validation-errors">
+        <ng-container *ngFor="let validation of validationErrors.street_text">
+          <p class="validation-error" *ngIf="form.get('street_text').hasError(validation.type) && (form.get('street_text').dirty || form.get('street_text').touched)">
+            {{ validation.message }}
+          </p>
+        </ng-container>
+      </div>
+      <ion-item>
+        <ion-label position="floating">Будинок</ion-label>
+        <ion-input type="text" formControlName="building"></ion-input>
+      </ion-item>
+      <ion-item>
+        <ion-label position="floating">Квартира</ion-label>
+        <ion-input type="text" formControlName="flat"></ion-input>
+      </ion-item>
+    </ion-list>
+    <p><ion-button type="submit">Продовжити <ion-icon slot="end" name="arrow-forward"></ion-icon></ion-button></p>
+  </form>
 </ion-content>

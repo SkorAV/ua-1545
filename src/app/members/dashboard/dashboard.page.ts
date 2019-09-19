@@ -45,7 +45,6 @@ export class DashboardPage implements OnInit {
 
     this.pageNumber++;
     this.getAppeals(event);
-    console.log('Done');
   }
 
   refresh() {
@@ -94,7 +93,6 @@ export class DashboardPage implements OnInit {
   }
 
   setNumberFilter(event: any) {
-    console.log(event);
     this.numberFilter = event.detail.value.toLowerCase();
   }
 }

@@ -1,30 +1,30 @@
-import { Injectable } from '@angular/core';
-import { LoadingController } from '@ionic/angular';
+import {Injectable} from '@angular/core';
+import {LoadingController} from '@ionic/angular';
 
 @Injectable({
   providedIn: 'root'
 })
 export class LoadingService {
-  isLoading = false;
-
-  constructor(public loadingController: LoadingController) { }
-
-  async present() {
-    this.isLoading = true;
-    return await this.loadingController.create({
-      message: 'Завантаження...',
-      duration: 10000,
-    }).then(loader => {
-      loader.present().then(() => {
-        if (!this.isLoading) {
-          loader.dismiss();
-        }
-      });
-    });
+  constructor(public loadingController: LoadingController) {
   }
 
+  async present(options: object) {
+    // Dismiss all pending loaders before creating the new one
+    await this.dismiss();
+
+    await this.loadingController
+      .create(options)
+      .then(res => {
+        res.present();
+      });
+  }
+
+  /**
+   * Dismiss all the pending loaders, if any
+   */
   async dismiss() {
-    this.isLoading = false;
-    return await this.loadingController.dismiss();
+    while (await this.loadingController.getTop() !== undefined) {
+      await this.loadingController.dismiss();
+    }
   }
 }

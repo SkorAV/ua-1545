@@ -78,4 +78,27 @@
   h2, h3, h4 {
     color: var(--ion-color-primary);
   }
+  p.validation-error {
+    color: var(--ion-color-danger);
+    font-size: small;
+    padding-left: var(--ion-padding, 16px);
+  }
+  .alert-wrapper {
+    width: 100%;
+    min-width: 100%;
+    max-width: 100%;
+  }
+  .alert-checkbox-label {
+    font-size: 12px;
+    white-space: normal;
+  }
+  .alert-radio-label {
+    font-size: 12px;
+    white-space: normal;
+  }
+  .dropdown-list {
+    --highlight-height: 0 !important;
+    font-size: 12px;
+    white-space: normal;
+  }
 }

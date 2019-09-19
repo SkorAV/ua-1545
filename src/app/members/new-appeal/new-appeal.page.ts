@@ -1,4 +1,4 @@
-import {Component, OnInit, ViewChild} from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import { Router } from '@angular/router';
 import {QuestionService} from './question/question.service';
@@ -70,10 +70,5 @@ export class NewAppealPage implements OnInit {
   }
 
   sendAppeal() {
-
-  }
-
-  log() {
-    console.log(this.uploadFiles);
   }
 }

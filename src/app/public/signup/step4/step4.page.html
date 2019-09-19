@@ -10,16 +10,23 @@
 </ion-header>
 
 <ion-content padding>
-    <p>На вашу електронну адресу iwueriwueyriuw@lfklskdjf.com надіслано лист для підтверження реєстрації.</p>
-    <p> свою пошту та слідкуйте інструкціям у листі.</p>
+  <ion-list lines="none">
+    <h4>4. Підтвердження</h4>
+    <ion-item>
+      <p>На вашу електронну адресу {{ signupService.signupState.value.email }} надіслано лист для підтверження реєстрації.</p>
+    </ion-item>
+    <ion-item>
+      <p>Перевірте свою пошту та слідкуйте інструкціям у листі.</p>
+    </ion-item>
     <ion-grid>
         <ion-row>
             <ion-col>
                 <ion-button expand="block" routerLink="" routerDirection="root">На головну</ion-button>
             </ion-col>
-            <ion-col>
-                <a>Відправити ще раз</a>
+            <ion-col class="ion-padding-vertical">
+                <a routerLink="" (click)="sendAgain()">Відправити ще раз</a>
             </ion-col>
         </ion-row>
     </ion-grid>
+  </ion-list>
 </ion-content>

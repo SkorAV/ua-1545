@@ -10,22 +10,46 @@
 </ion-header>
 
 <ion-content fullscreen padding>
-  <div>
-    <h2>1. Реєстраційні дані</h2>
-    <ion-item>
-      <ion-label position="stacked">E-mail</ion-label>
-      <ion-input name="email" clearInput type="email" inputmode="email" required></ion-input>
-    </ion-item>
-    <ion-item>
-      <ion-label position="stacked">Пароль</ion-label>
-      <ion-input name="password" type="password"></ion-input>
-    </ion-item>
-    <ion-item>
-      <ion-label position="stacked">Повторно пароль</ion-label>
-      <ion-input name="password_repeat" type="password"></ion-input>
-    </ion-item>
-    <div class="ion-padding">
-      <p><ion-button routerDirection="forward" routerLink="/signup/step2">Продовжити <ion-icon slot="end" name="arrow-forward"></ion-icon></ion-button></p>
-    </div>
-  </div>
+  <form [formGroup]="form" (ngSubmit)="stepTwo(form.value)">
+    <ion-list lines="none">
+      <h4>1. Реєстраційні дані</h4>
+      <ion-item>
+        <ion-label position="floating">E-mail</ion-label>
+        <ion-input formControlName="email" clearInput type="email" inputmode="email" (ionChange)="clearError()"></ion-input>
+      </ion-item>
+      <p class="validation-error" *ngIf="error && error.email">{{ error.email }}</p>
+      <div class="validation-errors">
+        <ng-container *ngFor="let validation of validationErrors.email">
+          <p class="validation-error" *ngIf="form.get('email').hasError(validation.type) && (form.get('email').dirty || form.get('email').touched)">
+            {{ validation.message }}
+          </p>
+        </ng-container>
+      </div>
+      <ion-item>
+        <ion-label position="floating">Пароль</ion-label>
+        <ion-input formControlName="password" type="password" (ionChange)="clearError()"></ion-input>
+      </ion-item>
+      <p class="validation-error" *ngIf="error && error.password">{{ error.password }}</p>
+      <div class="validation-errors">
+        <ng-container *ngFor="let validation of validationErrors.password">
+          <p class="validation-error" *ngIf="form.get('password').hasError(validation.type) && (form.get('password').dirty || form.get('password').touched)">
+            {{ validation.message }}
+          </p>
+        </ng-container>
+      </div>
+      <ion-item>
+        <ion-label position="floating">Повторно пароль</ion-label>
+        <ion-input formControlName="passwordRepeat" type="password" (ionChange)="clearError()"></ion-input>
+      </ion-item>
+      <p padding-start class="validation-error" *ngIf="error && error.passwordRepeat">{{ error.passwordRepeat }}</p>
+      <div class="validation-errors">
+        <ng-container *ngFor="let validation of validationErrors.passwordRepeat">
+          <p class="validation-error" *ngIf="form.get('passwordRepeat').hasError(validation.type) && (form.get('passwordRepeat').dirty || form.get('passwordRepeat').touched)">
+            {{ validation.message }}
+          </p>
+        </ng-container>
+      </div>
+    </ion-list>
+    <p><ion-button type="submit">Продовжити <ion-icon slot="end" name="arrow-forward"></ion-icon></ion-button></p>
+  </form>
 </ion-content>

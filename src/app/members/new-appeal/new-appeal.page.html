@@ -15,7 +15,7 @@
 </ion-header>
 
 <ion-content padding>
-  <ion-list>
+  <ion-list lines="none">
     <ion-label position="stacked">
       <h3>Питання</h3>
     </ion-label>
@@ -25,7 +25,7 @@
     <ion-label position="stacked">
       <h3>Населений пункт, якого стосується питання</h3>
     </ion-label>
-    <ion-item lines="none">
+    <ion-item>
       <ion-textarea
           #locationSelect
           type="text"
@@ -35,8 +35,8 @@
           [value]="getFullLocation(selectedLocation)"
       ></ion-textarea>
     </ion-item>
-    <ion-list *ngIf="locations.length > 0">
-      <ion-item lines="none" button *ngFor="let item of locations" (click)="selectLocation(item)">
+    <ion-list lines="none" *ngIf="locations.length > 0">
+      <ion-item button *ngFor="let item of locations" (click)="selectLocation(item)">
         <p>{{ getFullLocation(item) }}</p>
       </ion-item>
     </ion-list>
@@ -53,6 +53,6 @@
     <p><small>Доступна кількість символів: {{ 2500 - appealText.length }}</small></p>
   </ion-list>
   <section>
-    <ion-button expand="block" [disabled]="!question.selected || !selectedLocation || appealText.length < 0" (click)="sendAppeal()">Відправити звернення</ion-button>
+    <ion-button expand="block" [disabled]="!question.selected || !selectedLocation || appealText.length < 1" (click)="sendAppeal()">Відправити звернення</ion-button>
   </section>
 </ion-content>

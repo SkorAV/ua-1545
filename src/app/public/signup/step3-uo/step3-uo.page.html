@@ -10,118 +10,268 @@
 </ion-header>
 
 <ion-content padding>
-  <h2>3. Дані особи</h2>
-  <ion-item>
-    <ion-label position="stacked">Прізвище</ion-label>
-    <ion-input type="text" required></ion-input>
-  </ion-item>
-  <ion-item>
-    <ion-label position="stacked">Ім’я</ion-label>
-    <ion-input type="text" required></ion-input>
-  </ion-item>
-  <ion-item>
-    <ion-label position="stacked">По батькові</ion-label>
-    <ion-input type="text" required></ion-input>
-  </ion-item>
-  <ion-list lines="none">
-    <ion-list-header>Зона відповідальності</ion-list-header>
-    <ion-item>
-      <ion-label>З технічних питань</ion-label>
-      <ion-checkbox slot="start"></ion-checkbox>
-    </ion-item>
-    <ion-item>
-      <ion-label>З юридичних питань</ion-label>
-      <ion-checkbox slot="start"></ion-checkbox>
-    </ion-item>
-    <ion-item>
-      <ion-label>З бухгалтерських питань</ion-label>
-      <ion-checkbox slot="start"></ion-checkbox>
-    </ion-item>
-    <ion-item>
-      <ion-label>Основний контакт</ion-label>
-      <ion-checkbox slot="start"></ion-checkbox>
-    </ion-item>
-    <ion-item>
-      <ion-label>Додатковий контакт</ion-label>
-      <ion-checkbox slot="start"></ion-checkbox>
-    </ion-item>
-    <ion-item>
-      <ion-label>Терміновий контакт</ion-label>
-      <ion-checkbox slot="start"></ion-checkbox>
-    </ion-item>
-    <ion-item>
-      <ion-label>Інше</ion-label>
-      <ion-checkbox slot="start"></ion-checkbox>
-    </ion-item>
-  </ion-list>
-  <ion-item>
-    <ion-label position="stacked">Назва організації</ion-label>
-    <ion-input type="text" required></ion-input>
-  </ion-item>
-  <ion-item>
-    <ion-label position="stacked">Форма власності</ion-label>
-    <ion-input type="text" required></ion-input>
-  </ion-item>
-  <ion-item>
-    <ion-label position="stacked">ЄДРПОУ</ion-label>
-    <ion-input type="text" required></ion-input>
-  </ion-item>
-  <ion-item>
-    <ion-label position="stacked">№ свідоцтва про державну реєстрацію</ion-label>
-    <ion-input type="text" required></ion-input>
-  </ion-item>
-  <ion-item>
-    <ion-label position="stacked">Індекс юридичної адреси</ion-label>
-    <ion-input type="text" required></ion-input>
-  </ion-item>
-  <ion-item>
-    <ion-label position="stacked">Населений пункт юридичної адреси</ion-label>
-    <ion-input type="text" required></ion-input>
-  </ion-item>
-  <ion-item>
-    <ion-label position="stacked">Вулиця юридичної адреси</ion-label>
-    <ion-input type="text" required></ion-input>
-  </ion-item>
-  <ion-item>
-    <ion-label position="stacked">Будинок юридичної адреси</ion-label>
-    <ion-input type="text" required></ion-input>
-  </ion-item>
-  <ion-item>
-    <ion-label position="stacked">Офіс юридичної адреси</ion-label>
-    <ion-input type="text" required></ion-input>
-  </ion-item>
-  <ion-item>
-    <ion-label>Юридична адреса співпадає з фактичною адресою</ion-label>
-    <ion-checkbox slot="start"></ion-checkbox>
-  </ion-item>
-  <ion-item>
-    <ion-label position="stacked">Індекс фактичної адреси</ion-label>
-    <ion-input type="text" required></ion-input>
-  </ion-item>
-  <ion-item>
-    <ion-label position="stacked">Населений пункт фактичної адреси</ion-label>
-    <ion-input type="text" required></ion-input>
-  </ion-item>
-  <ion-item>
-    <ion-label position="stacked">Вулиця фактичної адреси</ion-label>
-    <ion-input type="text" required></ion-input>
-  </ion-item>
-  <ion-item>
-    <ion-label position="stacked">Будинок фактичної адреси</ion-label>
-    <ion-input type="text" required></ion-input>
-  </ion-item>
-  <ion-item>
-    <ion-label position="stacked">Офіс фактичної адреси</ion-label>
-    <ion-input type="text" required></ion-input>
-  </ion-item>
-  <ion-item>
-    <ion-label position="stacked">Контактний телефон</ion-label>
-    <ion-input type="text"></ion-input>
-  </ion-item>
-  <ion-item>
-    <ion-label position="stacked">Додатковий телефон</ion-label>
-    <ion-input type="text"></ion-input>
-  </ion-item>
-
-  <ion-button type="button" routerDirection="forward" routerLink="/signup/step4">Продовжити <ion-icon slot="end" name="arrow-forward"></ion-icon></ion-button>
+  <form [formGroup]="form" (ngSubmit)="step4(form.value)">
+    <ion-list lines="none">
+      <h4>3. Дані особи</h4>
+      <ion-item>
+        <ion-label position="floating">Прізвище</ion-label>
+        <ion-input type="text" formControlName="surname" (ionChange)="clearError()"></ion-input>
+      </ion-item>
+      <p class="validation-error" *ngIf="error && error.surname">{{ error.surname }}</p>
+      <div class="validation-errors">
+        <ng-container *ngFor="let validation of validationErrors.surname">
+          <p class="validation-error" *ngIf="form.get('surname').hasError(validation.type) && (form.get('surname').dirty || form.get('surname').touched)">
+            {{ validation.message }}
+          </p>
+        </ng-container>
+      </div>
+      <ion-item>
+        <ion-label position="floating">Ім’я</ion-label>
+        <ion-input type="text" formControlName="name" (ionChange)="clearError()"></ion-input>
+      </ion-item>
+      <p class="validation-error" *ngIf="error && error.name">{{ error.name }}</p>
+      <div class="validation-errors">
+        <ng-container *ngFor="let validation of validationErrors.name">
+          <p class="validation-error" *ngIf="form.get('name').hasError(validation.type) && (form.get('name').dirty || form.get('name').touched)">
+            {{ validation.message }}
+          </p>
+        </ng-container>
+      </div>
+      <ion-item>
+        <ion-label position="floating">По батькові</ion-label>
+        <ion-input type="text" formControlName="patronymic" (ionChange)="clearError()"></ion-input>
+      </ion-item>
+      <p class="validation-error" *ngIf="error && error.patronymic">{{ error.patronymic }}</p>
+      <div class="validation-errors">
+        <ng-container *ngFor="let validation of validationErrors.patronymic">
+          <p class="validation-error" *ngIf="form.get('patronymic').hasError(validation.type) && (form.get('patronymic').dirty || form.get('patronymic').touched)">
+            {{ validation.message }}
+          </p>
+        </ng-container>
+      </div>
+      <ion-item>
+        <ion-label position="stacked">Зона відповідальності</ion-label>
+        <ion-select formControlName="area" cancelText="Відміна" placeholder="Оберіть" multiple>
+          <ion-select-option *ngFor="let area of areas">{{ area }}</ion-select-option>
+        </ion-select>
+      </ion-item>
+      <ion-item>
+        <ion-label position="stacked">Назва організації</ion-label>
+        <ion-input type="text" formControlName="organization_name"></ion-input>
+      </ion-item>
+      <p class="validation-error" *ngIf="error && error.organization_name">{{ error.organization_name }}</p>
+      <div class="validation-errors">
+        <ng-container *ngFor="let validation of validationErrors.organization_name">
+          <p class="validation-error" *ngIf="form.get('organization_name').hasError(validation.type) && (form.get('organization_name').dirty || form.get('organization_name').touched)">
+            {{ validation.message }}
+          </p>
+        </ng-container>
+      </div>
+      <ion-item>
+        <ion-label position="stacked">Форма власності</ion-label>
+        <ion-select formControlName="organization_form" cancelText="Відміна" placeholder="Оберіть">
+          <ion-select-option *ngFor="let organizationForm of organizationForms">{{ organizationForm }}</ion-select-option>
+        </ion-select>
+      </ion-item>
+      <p class="validation-error" *ngIf="error && error.organization_form">{{ error.organization_form }}</p>
+      <div class="validation-errors">
+        <ng-container *ngFor="let validation of validationErrors.organization_form">
+          <p class="validation-error" *ngIf="form.get('organization_form').hasError(validation.type) && (form.get('organization_form').dirty || form.get('organization_form').touched)">
+            {{ validation.message }}
+          </p>
+        </ng-container>
+      </div>
+      <ion-item>
+        <ion-label position="stacked">ЄДРПОУ</ion-label>
+        <ion-input type="text" formControlName="edrpou"></ion-input>
+      </ion-item>
+      <p class="validation-error" *ngIf="error && error.edrpou">{{ error.edrpou }}</p>
+      <div class="validation-errors">
+        <ng-container *ngFor="let validation of validationErrors.edrpou">
+          <p class="validation-error" *ngIf="form.get('edrpou').hasError(validation.type) && (form.get('edrpou').dirty || form.get('edrpou').touched)">
+            {{ validation.message }}
+          </p>
+        </ng-container>
+      </div>
+      <ion-item>
+        <ion-label position="stacked">№ свідоцтва про державну реєстрацію</ion-label>
+        <ion-input type="text" formControlName="registration_document_number"></ion-input>
+      </ion-item>
+      <p class="validation-error" *ngIf="error && error.registration_document_number">{{ error.registration_document_number }}</p>
+      <div class="validation-errors">
+        <ng-container *ngFor="let validation of validationErrors.registration_document_number">
+          <p class="validation-error" *ngIf="form.get('registration_document_number').hasError(validation.type) && (form.get('registration_document_number').dirty || form.get('registration_document_number').touched)">
+            {{ validation.message }}
+          </p>
+        </ng-container>
+      </div>
+      <ion-item>
+        <ion-label position="floating">Індекс юридичної адреси</ion-label>
+        <ion-input type="text" formControlName="zip" (ionChange)="clearError()" (ionBlur)="zipBlur()"></ion-input>
+      </ion-item>
+      <p class="validation-error" *ngIf="error && error.zip">{{ error.zip }}</p>
+      <div class="validation-errors">
+        <ng-container *ngFor="let validation of validationErrors.zip">
+          <p class="validation-error" *ngIf="form.get('zip').hasError(validation.type) && (form.get('zip').dirty || form.get('zip').touched)">
+            {{ validation.message }}
+          </p>
+        </ng-container>
+      </div>
+      <ion-item>
+        <ion-label position="floating">Населений пункт юридичної адреси</ion-label>
+        <ion-input
+            #locationSelect
+            formControlName="city_text"
+            type="text"
+            debounce="1000"
+            placeholder="Вкажіть населений пункт"
+            (ionChange)="getLocation($event); locationSelect.setFocus();"
+            [value]="getFullLocation(selectedLocation)"
+            (ionBlur)="validateCitySelection()"
+        ></ion-input>
+        <ion-list lines="none" *ngIf="locations.length > 0">
+          <ion-item lines="none" button detail class="dropdown-list" *ngFor="let location of locations" (click)="selectLocation(location)">
+            <p>{{ getFullLocation(location) }}</p>
+          </ion-item>
+        </ion-list>
+      </ion-item>
+      <p class="validation-error" *ngIf="error && error.city">{{ error.city }}</p>
+      <div class="validation-errors">
+        <ng-container *ngFor="let validation of validationErrors.city">
+          <p class="validation-error" *ngIf="form.get('city').hasError(validation.type) && (form.get('city').dirty || form.get('city').touched)">
+            {{ validation.message }}
+          </p>
+        </ng-container>
+      </div>
+      <ion-item>
+        <ion-label position="floating">Вулиця юридичної адреси</ion-label>
+        <ion-input
+            #streetSelect
+            formControlName="street_text"
+            type="text"
+            debounce="1000"
+            placeholder="Вкажіть вулицю"
+            (ionChange)="getStreet($event); streetSelect.setFocus();"
+            [value]="selectedStreet?.model.name"
+            (ionBlur)="validateStreetSelection()"
+        ></ion-input>
+        <ion-list lines="none" *ngIf="streets.length > 0">
+          <ion-item lines="none" button detail class="dropdown-list" *ngFor="let street of streets" (click)="selectStreet(street)">
+            <p>{{ street.model.name }}</p>
+          </ion-item>
+        </ion-list>
+      </ion-item>
+      <p class="validation-error" *ngIf="error && error.street">{{ error.street }}</p>
+      <div class="validation-errors">
+        <ng-container *ngFor="let validation of validationErrors.street">
+          <p class="validation-error" *ngIf="form.get('street').hasError(validation.type) && (form.get('street').dirty || form.get('street').touched)">
+            {{ validation.message }}
+          </p>
+        </ng-container>
+      </div>
+      <ion-item>
+        <ion-label position="floating">Будинок юридичної адреси</ion-label>
+        <ion-input type="text" formControlName="building" (ionBlur)="buildingBlur()"></ion-input>
+      </ion-item>
+      <ion-item>
+        <ion-label position="floating">Офіс юридичної адреси</ion-label>
+        <ion-input type="text" formControlName="flat" (ionBlur)="flatBlur()"></ion-input>
+      </ion-item>
+      <ion-item>
+        <ion-label text-wrap>Юридична адреса співпадає з фактичною адресою</ion-label>
+        <ion-toggle slot="start" (ionChange)="toggle()"></ion-toggle>
+      </ion-item>
+      <ng-container *ngIf="!toggled">
+        <ion-item>
+          <ion-label position="floating">Індекс фактичної адреси</ion-label>
+          <ion-input type="text" formControlName="fact_zip" (ionChange)="clearError()"></ion-input>
+        </ion-item>
+        <p class="validation-error" *ngIf="error && error.fact_zip">{{ error.fact_zip }}</p>
+        <div class="validation-errors">
+          <ng-container *ngFor="let validation of validationErrors.fact_zip">
+            <p class="validation-error" *ngIf="form.get('fact_zip').hasError(validation.type) && (form.get('fact_zip').dirty || form.get('fact_zip').touched)">
+              {{ validation.message }}
+            </p>
+          </ng-container>
+        </div>
+        <ion-item>
+          <ion-label position="floating">Населений пункт фактичної адреси</ion-label>
+          <ion-input
+              #factLocationSelect
+              formControlName="fact_city_text"
+              type="text"
+              debounce="1000"
+              placeholder="Вкажіть населений пункт"
+              (ionChange)="getFactLocation($event); factLocationSelect.setFocus();"
+              [value]="getFullLocation(selectedFactLocation)"
+              (ionBlur)="validateFactCitySelection()"
+          ></ion-input>
+          <ion-list lines="none" *ngIf="locations.length > 0">
+            <ion-item lines="none" button detail class="dropdown-list" *ngFor="let location of locations" (click)="selectFactLocation(location)">
+              <p>{{ getFullLocation(location) }}</p>
+            </ion-item>
+          </ion-list>
+        </ion-item>
+        <p class="validation-error" *ngIf="error && error.fact_city">{{ error.fact_city }}</p>
+        <div class="validation-errors">
+          <ng-container *ngFor="let validation of validationErrors.fact_city">
+            <p class="validation-error" *ngIf="form.get('fact_city').hasError(validation.type) && (form.get('fact_city').dirty || form.get('fact_city').touched)">
+              {{ validation.message }}
+            </p>
+          </ng-container>
+        </div>
+        <ion-item>
+          <ion-label position="floating">Вулиця фактичної адреси</ion-label>
+          <ion-input
+              #factStreetSelect
+              formControlName="fact_street_text"
+              type="text"
+              debounce="1000"
+              placeholder="Вкажіть вулицю"
+              (ionChange)="getFactStreet($event); factStreetSelect.setFocus();"
+              [value]="selectedFactStreet?.model.name"
+              (ionBlur)="validateFactStreetSelection()"
+          ></ion-input>
+          <ion-list lines="none" *ngIf="streets.length > 0">
+            <ion-item lines="none" button detail class="dropdown-list" *ngFor="let street of streets" (click)="selectFactStreet(street)">
+              <p>{{ street.model.name }}</p>
+            </ion-item>
+          </ion-list>
+        </ion-item>
+        <p class="validation-error" *ngIf="error && error.fact_street">{{ error.fact_street }}</p>
+        <div class="validation-errors">
+          <ng-container *ngFor="let validation of validationErrors.fact_street">
+            <p class="validation-error" *ngIf="form.get('fact_street').hasError(validation.type) && (form.get('fact_street').dirty || form.get('fact_street').touched)">
+              {{ validation.message }}
+            </p>
+          </ng-container>
+        </div>
+        <ion-item>
+          <ion-label position="floating">Будинок фактичної адреси</ion-label>
+          <ion-input type="text" formControlName="fact_building"></ion-input>
+        </ion-item>
+        <ion-item>
+          <ion-label position="floating">Офіс фактичної адреси</ion-label>
+          <ion-input type="text" formControlName="fact_flat"></ion-input>
+        </ion-item>
+      </ng-container>
+      <ion-item>
+        <ion-label position="floating">Контактний телефон</ion-label>
+        <ion-input type="phone" formControlName="phone" (ionChange)="clearError()"></ion-input>
+      </ion-item>
+      <p class="validation-error" *ngIf="error && error.phone">{{ error.phone }}</p>
+      <div class="validation-errors">
+        <ng-container *ngFor="let validation of validationErrors.phone">
+          <p class="validation-error" *ngIf="form.get('phone').hasError(validation.type) && (form.get('phone').dirty || form.get('phone').touched)">
+            {{ validation.message }}
+          </p>
+        </ng-container>
+      </div>
+      <ion-item>
+        <ion-label position="floating">Додатковий телефон</ion-label>
+        <ion-input type="text" formControlName="additional_phone"></ion-input>
+      </ion-item>
+    </ion-list>
+    <p><ion-button type="submit">Продовжити <ion-icon slot="end" name="arrow-forward"></ion-icon></ion-button></p>
+  </form>
 </ion-content>

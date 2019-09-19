@@ -1,0 +1,48 @@
+<ion-header>
+  <ion-toolbar color="primary">
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/login"></ion-back-button>
+    </ion-buttons>
+    <ion-title>Відновлення пароля</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content padding *ngIf="!sent">
+  <form [formGroup]="form" (ngSubmit)="restore(form.value)">
+    <ion-list lines="none">
+      <ion-item>
+        <ion-label position="floating">E-mail</ion-label>
+        <ion-input clearInput type="email" inputmode="email" formControlName="email"></ion-input>
+      </ion-item>
+      <ng-container *ngFor="let validation of validationErrors.email">
+        <p class="validation-error" *ngIf="form.get('email').hasError(validation.type) && (form.get('email').dirty || form.get('email').touched)">
+          {{ validation.message }}
+        </p>
+      </ng-container>
+      <ion-grid>
+        <ion-row>
+          <ion-col>
+            <ion-button expand="block" color="primary" type="submit">Відновити</ion-button>
+          </ion-col>
+        </ion-row>
+      </ion-grid>
+    </ion-list>
+  </form>
+</ion-content>
+<ion-content padding *ngIf="sent">
+  <ion-list lines="none">
+    <ion-item>
+      <p>На вашу електронну адресу {{ form.get('email').value }} надіслано лист для відновлення пароля.</p>
+    </ion-item>
+    <ion-item>
+      <p>Перевірте свою пошту.</p>
+    </ion-item>
+    <ion-grid>
+      <ion-row>
+        <ion-col>
+          <ion-button expand="block" color="primary" routerLink="/" routerDirection="root">На головну</ion-button>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+  </ion-list>
+</ion-content>

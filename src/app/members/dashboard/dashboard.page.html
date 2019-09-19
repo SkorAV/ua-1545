@@ -21,10 +21,10 @@
       </ion-row>
       <ion-row>
         <ion-col>
-          <ion-input type="text" placeholder="Пошук" (ionChange)="this.setNumberFilter($event)"></ion-input>
+          <ion-input type="text" placeholder="Пошук за номером" (ionChange)="this.setNumberFilter($event)"></ion-input>
         </ion-col>
         <ion-col>
-          <ion-select (ionChange)="this.setStatusFilter($event)" placeholder="Статус" cancel-text="Відміна" [interfaceOptions]="{ header: 'Статус' }" value="">
+          <ion-select (ionChange)="this.setStatusFilter($event)" placeholder="Статус" cancelText="Відміна" [interfaceOptions]="{ header: 'Статус' }" value="">
             <ion-select-option *ngFor="let appealStatus of this.appealsStatuses" [value]="appealStatus.value">{{ appealStatus.label }}</ion-select-option>
           </ion-select>
         </ion-col>

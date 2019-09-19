@@ -10,17 +10,17 @@
 </ion-header>
 
 <ion-content fullscreen padding>
-  <div>
-    <h2>2. Тип особи</h2>
+  <ion-list lines="none">
+    <h4>2. Тип особи</h4>
     <ion-item>
-      <ion-label position="stacked">Тип особи</ion-label>
-      <ion-select placeholder="Оберіть тип особи" [(ngModel)]="personType">
+      <ion-label position="floating">Тип особи</ion-label>
+      <ion-select placeholder="Оберіть тип особи" cancelText="Відміна" [(ngModel)]="personType">
         <ion-select-option value="f">Фізична особа</ion-select-option>
-        <ion-select-option value="u">Юридична особа особа</ion-select-option>
+        <ion-select-option value="u">Юридична особа</ion-select-option>
       </ion-select>
     </ion-item>
     <div class="ion-padding">
       <p><ion-button type="button" routerDirection="forward" [routerLink]="getNextStep()" [disabled]="!personType">Продовжити <ion-icon slot="end" name="arrow-forward"></ion-icon></ion-button></p>
     </div>
-  </div>
+  </ion-list>
 </ion-content>

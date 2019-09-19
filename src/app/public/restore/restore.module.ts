@@ -5,12 +5,12 @@ import { Routes, RouterModule } from '@angular/router';
 
 import { IonicModule } from '@ionic/angular';
 
-import { Step3FoPage } from './step3-fo.page';
+import { RestorePage } from './restore.page';
 
 const routes: Routes = [
   {
     path: '',
-    component: Step3FoPage
+    component: RestorePage
   }
 ];
 
@@ -22,6 +22,6 @@ const routes: Routes = [
     RouterModule.forChild(routes),
     ReactiveFormsModule
   ],
-  declarations: [Step3FoPage]
+  declarations: [RestorePage]
 })
-export class Step3FoPageModule {}
+export class RestorePageModule {}

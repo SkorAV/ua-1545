@@ -21,7 +21,8 @@ const routes: Routes = [
     path: 'members',
     canActivate: [AuthGuard],
     loadChildren: './members/member-routing.module#MemberRoutingModule'
-  }
+  },
+  { path: 'restore', loadChildren: './public/restore/restore.module#RestorePageModule' }
 ];
 @NgModule({
   imports: [

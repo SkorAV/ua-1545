@@ -1,10 +1,11 @@
 import { Injectable } from '@angular/core';
-import {HttpEvent, HttpHandler, HttpInterceptor, HttpRequest, HttpErrorResponse, HttpResponse} from '@angular/common/http';
+import {HttpEvent, HttpHandler, HttpInterceptor, HttpRequest, HttpErrorResponse} from '@angular/common/http';
 import {Observable} from 'rxjs';
 import {UkcApiService} from './ukc-api.service';
-import {catchError, finalize, map} from 'rxjs/operators';
+import {catchError, map} from 'rxjs/operators';
 import {LoadingController} from '@ionic/angular';
 import {handleError} from './error-handler.service';
+import {LoadingService} from './loading.service';
 
 @Injectable({
   providedIn: 'root'
@@ -13,11 +14,14 @@ export class HttpInterceptorService implements HttpInterceptor {
   loaderToShow: any;
   isShowing = true;
 
-  constructor(private apiService: UkcApiService, public loadingController: LoadingController) { }
+  constructor(
+    private apiService: UkcApiService,
+    public loadingController: LoadingController,
+    public loadingService: LoadingService
+  ) { }
 
   intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
     const token = this.apiService.getToken();
-    console.log('Executing request: ', request.method, request.url, request.params, request.body);
 
     // Authentication by setting header with token value
     if (token) {
@@ -36,21 +40,15 @@ export class HttpInterceptorService implements HttpInterceptor {
       });
     }
 
-    this.showLoader();
+    this.loadingService.present({message: 'Синхронізація з сервером...'});
 
     return next.handle(request).pipe(
       map((event: HttpEvent<any>) => {
-        if (event instanceof HttpResponse) {
-          console.log('Response Received:', event);
-        }
-
-        this.hideLoader();
-
+        this.loadingService.dismiss();
         return event;
       }),
       catchError((error: HttpErrorResponse) => {
-        this.hideLoader();
-
+        this.loadingService.dismiss();
         return handleError(error);
       })
     );
@@ -59,14 +57,13 @@ export class HttpInterceptorService implements HttpInterceptor {
   showLoader() {
     this.loaderToShow = this.loadingController.create({
       message: 'Завантаження...',
-      duration: 10000
+      duration: 1000
     }).then((res) => {
       res.present();
       this.isShowing = true;
 
-      res.onDidDismiss().then((dis) => {
+      res.onDidDismiss().then(() => {
         this.isShowing = false;
-        console.log('Loading dismissed!', dis);
       });
     });
     this.hideLoader();

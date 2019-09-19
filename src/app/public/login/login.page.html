@@ -12,25 +12,39 @@
       </ion-col>
     </ion-row>
   </ion-grid>
-  <form>
-    <ion-item>
-      <ion-label position="stacked">E-mail</ion-label>
-      <ion-input clearInput type="email" inputmode="email" #email></ion-input>
-    </ion-item>
-    <ion-item>
-      <ion-label position="stacked">Пароль</ion-label>
-      <ion-input type="password" #password></ion-input>
-    </ion-item>
-    <ion-grid>
-      <ion-row>
-        <ion-col>
-          <ion-button expand="block" type="submit" (click)="apiService.login(email.value, password.value);">Увійти</ion-button>
-        </ion-col>
-        <ion-col class="ion-padding-vertical">
-          <a routerLink="/restore">Забули пароль?</a>
-        </ion-col>
-      </ion-row>
-    </ion-grid>
+  <form [formGroup]="form" (ngSubmit)="login(form.value)">
+    <ion-list lines="none">
+      <ion-item>
+        <ion-label position="floating">E-mail</ion-label>
+        <ion-input clearInput type="email" inputmode="email" formControlName="email" (ionChange)="clearError()"></ion-input>
+      </ion-item>
+      <p class="validation-error" *ngIf="error && error.email">{{ error.email }}</p>
+      <ng-container *ngFor="let validation of validationErrors.email">
+        <p class="validation-error" *ngIf="form.get('email').hasError(validation.type) && (form.get('email').dirty || form.get('email').touched)">
+          {{ validation.message }}
+        </p>
+      </ng-container>
+      <ion-item>
+        <ion-label position="floating">Пароль</ion-label>
+        <ion-input type="password" formControlName="password" (ionChange)="clearError()"></ion-input>
+      </ion-item>
+      <p class="validation-error" *ngIf="error && error.password">{{ error.password }}</p>
+      <ng-container *ngFor="let validation of validationErrors.password">
+        <p class="validation-error" *ngIf="form.get('password').hasError(validation.type) && (form.get('password').dirty || form.get('password').touched)">
+          {{ validation.message }}
+        </p>
+      </ng-container>
+      <ion-grid>
+        <ion-row>
+          <ion-col>
+            <ion-button expand="block" color="primary" type="submit">Увійти</ion-button>
+          </ion-col>
+          <ion-col class="ion-padding-vertical">
+            <a routerLink="/restore">Забули пароль?</a>
+          </ion-col>
+        </ion-row>
+      </ion-grid>
+    </ion-list>
   </form>
 </ion-content>
 <ion-content padding *ngIf="apiService.isAuthenticated()">
