@@ -11,7 +11,7 @@ import {ToastController} from '@ionic/angular';
 export class Step4Page implements OnInit {
 
   constructor(
-    private signupService: SignupService,
+    public signupService: SignupService,
     public apiService: UkcApiService,
     public toast: ToastController
   ) { }

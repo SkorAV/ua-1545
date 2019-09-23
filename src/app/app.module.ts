@@ -9,10 +9,9 @@ import { StatusBar } from '@ionic-native/status-bar/ngx';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 
-import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
+import { HTTP } from '@ionic-native/http/ngx';
 import { IonicStorageModule } from '@ionic/storage';
 
-import { HttpInterceptorService } from './services/http-interceptor.service';
 import {registerLocaleData} from '@angular/common';
 import localeUa from '@angular/common/locales/ru-UA';
 import localeUaExtra from '@angular/common/locales/extra/ru-UA';
@@ -26,14 +25,13 @@ registerLocaleData(localeUa, 'uk-UA', localeUaExtra);
     BrowserModule,
     IonicModule.forRoot(),
     AppRoutingModule,
-    HttpClientModule,
     IonicStorageModule.forRoot()
   ],
   providers: [
     StatusBar,
     SplashScreen,
-    { provide: RouteReuseStrategy, useClass: IonicRouteStrategy },
-    { provide: HTTP_INTERCEPTORS, useClass: HttpInterceptorService, multi: true }
+    {provide: RouteReuseStrategy, useClass: IonicRouteStrategy},
+    HTTP
   ],
   bootstrap: [AppComponent]
 })

@@ -93,7 +93,8 @@ export class Step3FoPage implements OnInit {
 
   getLocation($event) {
     const value = $event.detail.value;
-    if (value.indexOf(',') > -1) {
+    if (value.indexOf(', ') > -1) {
+      this.locations = [];
       return;
     }
     if (value === '' || this.getFullLocation(this.selectedLocation) === value) {

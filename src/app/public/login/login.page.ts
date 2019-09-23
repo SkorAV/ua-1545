@@ -1,6 +1,5 @@
 import { Component, OnInit } from '@angular/core';
 import {UkcApiService} from '../../services/ukc-api.service';
-import {Profile} from '../../models/profile';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 
 @Component({
@@ -9,7 +8,6 @@ import {FormBuilder, FormGroup, Validators} from '@angular/forms';
   styleUrls: ['./login.page.scss'],
 })
 export class LoginPage implements OnInit {
-  profile: Profile;
   form: FormGroup;
   error: any = {};
   validationErrors = {
@@ -24,12 +22,12 @@ export class LoginPage implements OnInit {
     ]
   };
 
-  constructor(private apiService: UkcApiService, public formBuilder: FormBuilder) {
+  constructor(public apiService: UkcApiService, public formBuilder: FormBuilder) {
   }
 
   ngOnInit() {
     if (this.apiService.isAuthenticated()) {
-      this.profile = this.apiService.getUserProfile();
+      this.apiService.getUserProfileFromStorage();
     }
     this.form = this.formBuilder.group({
       email: ['', Validators.compose([
@@ -49,7 +47,8 @@ export class LoginPage implements OnInit {
       });
       return;
     }
-    this.apiService.getTokenFromApi(value.email, value.password).subscribe((response) => {
+    this.apiService.login(value.email, value.password).subscribe((response) => {
+      console.log('got native:', response);
       this.apiService.saveToken(response.token);
     }, error => {
       this.setError(error.errors);

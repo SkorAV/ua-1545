@@ -16,11 +16,9 @@
       <ion-label>Особисті дані</ion-label>
     </ion-segment-button>
   </ion-segment>
-  <ion-list *ngIf="pageSelect.value === 'registration'">
-    <ion-label position="stacked">
-      <h3>Email</h3>
-    </ion-label>
-    <ion-item lines="none">
+  <ion-list lines="none" *ngIf="pageSelect.value === 'registration'">
+    <ion-item>
+      <ion-label position="stacked">Email:</ion-label>
       <p>{{ me?.email }}</p>
     </ion-item>
     <section>
@@ -29,25 +27,88 @@
   </ion-list>
   <ion-list *ngIf="pageSelect.value === 'personal'">
     <ion-item>
-      Особисті дані
+      <ion-label position="stacked">Прізвище:</ion-label>
+      <p>{{ profile?.surname }}</p>
+    </ion-item>
+    <ion-item>
+      <ion-label position="stacked">Ім’я:</ion-label>
+      <p>{{ profile?.name }}</p>
+    </ion-item>
+    <ion-item>
+      <ion-label position="stacked">По батькові:</ion-label>
+      <p>{{ profile?.patronymic }}</p>
+    </ion-item>
+    <ion-item>
+      <ion-label position="stacked">Стать:</ion-label>
+      <p>{{ getGenderName(profile?.gender) }}</p>
+    </ion-item>
+    <ion-item>
+      <ion-label position="stacked">Контактний телефон:</ion-label>
+      <p>{{ profile?.phone }}</p>
+    </ion-item>
+    <ion-item>
+      <ion-label position="stacked">Додатковий телефон:</ion-label>
+      <p>{{ profile?.additional_phone }}</p>
+    </ion-item>
+    <ion-item>
+      <ion-label position="stacked">Соціальний стан:</ion-label>
+      <p>{{ profile?.social_type }}</p>
+    </ion-item>
+    <ion-item>
+      <ion-label position="stacked">Категорія:</ion-label>
+      <p *ngFor="let category of profile?.category">{{ category }}</p>
+    </ion-item>
+    <ion-item>
+      <ion-label position="stacked">Індекс:</ion-label>
+      <p>{{ profile?.zip }}</p>
+    </ion-item>
+    <ion-item>
+      <ion-label position="stacked">Місто:</ion-label>
+      <p>{{ profile?.city.label }}</p>
+    </ion-item>
+    <ion-item>
+      <ion-label position="stacked">Вулиця:</ion-label>
+      <p>{{ profile?.street.label }}</p>
+    </ion-item>
+    <ion-item>
+      <ion-label position="stacked">Будинок:</ion-label>
+      <p>{{ profile?.building }}</p>
+    </ion-item>
+    <ion-item>
+      <ion-label position="stacked">Квартира:</ion-label>
+      <p>{{ profile?.flat }}</p>
     </ion-item>
   </ion-list>
-  <ion-list *ngIf="passwordChangeVisible">
-    <ion-label position="stacked">
-      <h3>Новий пароль</h3>
-    </ion-label>
-    <ion-item lines="none">
-      <ion-input type="password" [ngModel]="password"></ion-input>
-    </ion-item>
-    <ion-label position="stacked">
-      <h3>Повторно пароль</h3>
-    </ion-label>
-    <ion-item lines="none">
-      <ion-input type="password" [ngModel]="passwordRepeat"></ion-input>
-    </ion-item>
-    <section>
-      <ion-button (click)="savePassword()">Зберегти</ion-button>
-      <ion-button (click)="passwordChangeVisible = false">Відмінити</ion-button>
-    </section>
+  <ion-list lines="none" *ngIf="passwordChangeVisible">
+    <form [formGroup]="form" (ngSubmit)="savePassword(form.value)">
+      <ion-item>
+        <ion-label position="floating">Новий пароль</ion-label>
+        <ion-input type="password" formControlName="password"></ion-input>
+      </ion-item>
+      <p class="validation-error" *ngIf="error && error.password">{{ error.password }}</p>
+      <div class="validation-errors">
+        <ng-container *ngFor="let validation of validationErrors.password">
+          <p class="validation-error" *ngIf="form.get('password').hasError(validation.type) && (form.get('password').dirty || form.get('password').touched)">
+            {{ validation.message }}
+          </p>
+        </ng-container>
+      </div>
+      <ion-item lines="none">
+        <ion-label position="floating">Повторно пароль</ion-label>
+        <ion-input type="password" formControlName="passwordRepeat"></ion-input>
+      </ion-item>
+      <p padding-start class="validation-error" *ngIf="error && error.passwordRepeat">{{ error.passwordRepeat }}</p>
+      <div class="validation-errors">
+        <ng-container *ngFor="let validation of validationErrors.passwordRepeat">
+          <p class="validation-error" *ngIf="form.get('passwordRepeat').hasError(validation.type) && (form.get('passwordRepeat').dirty || form.get('passwordRepeat').touched)">
+            {{ validation.message }}
+          </p>
+        </ng-container>
+      </div>
+      <section>
+        <ion-button type="submit" slot="start">Зберегти</ion-button>
+        <ion-button (click)="passwordChangeVisible = false" type="button" slot="end">Відмінити</ion-button>
+      </section>
+    </form>
   </ion-list>
 </ion-content>

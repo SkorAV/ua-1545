@@ -16,6 +16,7 @@ export class NewAppealPage implements OnInit {
   public selectedLocation: AppealLocation;
   appealText: any;
   uploadFiles: any;
+  error = false;
 
   constructor(private router: Router,
               public question: QuestionService,
@@ -31,16 +32,21 @@ export class NewAppealPage implements OnInit {
     });
   }
 
-  select1level1() {
+  selectLevel1() {
     this.router.navigate(['/members/level1']);
   }
 
   getLocation($event) {
-    if ($event.detail.value === '' || $event.detail.value.indexOf(', ') > -1) {
+    const value = $event.detail.value;
+    if (value.indexOf(', ') > -1) {
       this.locations = [];
       return;
     }
-    this.apiService.getLocations($event.detail.value).subscribe(response => {
+    if (value === '' || this.getFullLocation(this.selectedLocation) === value) {
+      this.locations = [];
+      return;
+    }
+    this.apiService.getLocations(value).subscribe(response => {
       this.locations = response.collection;
     });
   }
@@ -70,5 +76,18 @@ export class NewAppealPage implements OnInit {
   }
 
   sendAppeal() {
+    this.apiService.addAppeal({
+      content: this.appealText,
+      region: {
+        value: this.selectedLocation.id,
+        label: this.selectedLocation.name,
+        region: this.getFullLocation(this.selectedLocation).replace(this.selectedLocation.name, '')
+      },
+      region_id: this.selectedLocation.id,
+      source: null,
+      type_id: this.question.selected.model.id
+    }).subscribe(() => {
+      this.router.navigate(['members', 'dashboard']);
+    });
   }
 }

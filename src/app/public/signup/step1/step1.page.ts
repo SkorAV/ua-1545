@@ -50,9 +50,7 @@ export class Step1Page implements OnInit {
         PasswordValidator.validPassword,
         Validators.required
       ])],
-      passwordRepeat: ['', Validators.compose([
-        Validators.required
-      ])]
+      passwordRepeat: ['', Validators.required]
     }, {
       validator: PasswordValidator.mustMatch('password', 'passwordRepeat')
     });
@@ -73,7 +71,6 @@ export class Step1Page implements OnInit {
       this.signupService.signupState.next(data);
       this.router.navigate(['signup', 'step2']);
     }, error => {
-      console.log(error.errors);
       this.setError(error.errors);
     });
   }

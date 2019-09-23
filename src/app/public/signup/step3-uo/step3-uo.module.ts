@@ -6,6 +6,7 @@ import { Routes, RouterModule } from '@angular/router';
 import { IonicModule } from '@ionic/angular';
 
 import { Step3UoPage } from './step3-uo.page';
+import {SignupModule} from '../signup.module/signup.module';
 
 const routes: Routes = [
   {
@@ -20,7 +21,8 @@ const routes: Routes = [
     FormsModule,
     IonicModule,
     RouterModule.forChild(routes),
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    SignupModule
   ],
   declarations: [Step3UoPage]
 })

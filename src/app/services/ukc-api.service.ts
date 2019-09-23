@@ -1,9 +1,7 @@
 import {Injectable} from '@angular/core';
-import {HttpClient} from '@angular/common/http';
 import {BehaviorSubject, Observable} from 'rxjs';
 import {Appeals} from '../models/appeal';
 import {Model} from '../models/model';
-import {Token} from '../models/token';
 import {Platform} from '@ionic/angular';
 import {Storage} from '@ionic/storage';
 import {Profile} from '../models/profile';
@@ -12,6 +10,7 @@ import {AppealStatuses} from '../models/appeal-status';
 import {AppealType} from '../models/appeal-type';
 import {AppealLocations} from '../models/appeal-locations';
 import {AppealStreets} from '../models/appeal-streets';
+import {HTTP} from '@ionic-native/http/ngx';
 
 // storage keys
 const TOKEN_KEY = 'auth-token';
@@ -28,36 +27,92 @@ const RESPONSIBLE_AREA = 'misc/responsible-area';
 const AUTH_STEP3 = 'auth/signup';
 const AUTH_RESEND = 'auth/resend';
 const RESTORE = 'restore';
-
-const APPEALS_URL = 'requests';
-const APPEAL_STATUSES_URL = 'requests/statuses';
-const APPEAL_DETAILS_URL = 'requests/view/';
-const PROFILE_URL = 'profile';
-const ME_URL = 'profile/me';
-const APPEAL_TYPES_TREE_URL = 'misc/appeal-types-tree';
-const LOCATIONS_CITIES_URL = 'locations/cities';
+const APPEALS = 'requests';
+const APPEAL_STATUSES = 'requests/statuses';
+const APPEAL_DETAILS = 'requests/view/';
+const APPEAL_CREATE = 'requests/create';
+const PROFILE = 'profile';
+const ME = 'profile/me';
+const CHANGE_PASSWORD = 'profile/password';
+const APPEAL_TYPES_TREE = 'misc/appeal-types-tree';
+const LOCATIONS_CITIES = 'locations/cities';
 const LOCATIONS_STREETS = 'locations/streets/';
 
 @Injectable({
   providedIn: 'root'
 })
-export class UkcApiService {
-  public token: string;
-  private profile: Profile;
+class MyHTTP {
+  private pToken: string = null;
 
-  public authenticationState = new BehaviorSubject(false);
+  constructor(private nativeHttp: HTTP) {}
 
-  constructor(private http: HttpClient, public storage: Storage, private plt: Platform) {
-    this.plt.ready().then(() => {
-      this.checkToken();
-      this.getUserProfileFromStorage();
+  set token(value: string) {
+    this.pToken = value;
+  }
+
+  get token(): string {
+    return this.pToken;
+  }
+
+  public get<T>(url: string): Observable<any> {
+    let headers = {};
+    if (this.token) {
+      headers = {Authorization: this.token};
+    }
+    return new Observable<T>(observer => {
+      this.nativeHttp.get(url, {}, headers).then(response => {
+        console.log(response);
+        const parsedResponse = JSON.parse(response.data);
+        observer.next(parsedResponse);
+        observer.complete();
+      }).catch(error => {
+        console.log(error);
+        const parsedError = JSON.parse(error.error);
+        observer.error(parsedError);
+        observer.complete();
+      });
     });
   }
 
-  // Utils
+  public post<T>(url: string, data: any = {}): Observable<any> {
+    let headers = {};
+    if (this.token) {
+      headers = {Authorization: this.token};
+    }
+    return new Observable<T>(observer => {
+      this.nativeHttp.post(url, data, headers).then(response => {
+        console.log(response);
+        const parsedResponse = JSON.parse(response.data);
+        observer.next(parsedResponse);
+        observer.complete();
+      }).catch(error => {
+        console.log(error);
+        const parsedError = JSON.parse(error.error);
+        observer.error(parsedError);
+        observer.complete();
+      });
+    });
+  }
+}
 
-  formatDateTime(timestamp: number, format: string): string {
-    return formatDate(timestamp, format, 'uk-UA');
+@Injectable({
+  providedIn: 'root'
+})
+export class UkcApiService {
+  public profile: Profile;
+
+  public authenticationState = new BehaviorSubject(false);
+
+  constructor(
+    private http: MyHTTP,
+    public storage: Storage,
+    private plt: Platform
+  ) {
+    this.plt.ready().then(() => {
+      this.checkToken().then(() => {
+        this.getUserProfileFromStorage();
+      });
+    });
   }
 
   // Sign-Up
@@ -102,29 +157,36 @@ export class UkcApiService {
       .post(API_URL + AUTH_RESEND, {email});
   }
 
-  retorePassword(email) {
+  restorePassword(email) {
     return this.http
       .post(API_URL + RESTORE, {email});
   }
+
+  changePassword(password) {
+    return this.http
+      .post(API_URL + CHANGE_PASSWORD, {password});
+  }
+
   // Authentication
 
-  public getTokenFromApi(email: string, password: string): Observable<Token> {
+  public login(email: string, password: string) {
     return this.http
-      .post<Token>(API_URL + AUTH_URL, {email, password});
+      .post(API_URL + AUTH_URL, {email, password});
   }
 
   private checkToken() {
-    this.storage.get(TOKEN_KEY).then(res => {
+    return this.storage.get(TOKEN_KEY).then(res => {
       if (res) {
         this.authenticationState.next(true);
-        this.token = res;
+        this.http.token = res;
       }
     });
   }
 
   public saveToken(token: any) {
-    this.token = 'JWT ' + token;
-    this.storage.set(TOKEN_KEY, this.token);
+    token = 'JWT ' + token;
+    this.http.token = token;
+    this.storage.set(TOKEN_KEY, token);
     this.authenticationState.next(true);
     this.getUserProfileFromStorage();
   }
@@ -134,7 +196,7 @@ export class UkcApiService {
       this.authenticationState.next(false);
       this.deleteUserProfileFromStorage();
       delete this.profile;
-      delete this.token;
+      this.http.token = null;
     });
   }
 
@@ -143,7 +205,7 @@ export class UkcApiService {
   }
 
   getToken(): string {
-    return this.token;
+    return this.http.token;
   }
 
   // Appeals
@@ -154,40 +216,41 @@ export class UkcApiService {
     }
 
     return this.http
-      .get<Appeals>(API_URL + APPEALS_URL + '?page=' + page + '&per-page=11');
+      .get<Appeals>(API_URL + APPEALS + '?page=' + page + '&per-page=11');
   }
 
   getAppeal(appealId: any): Observable<Model> {
     return this.http
-      .get<Model>(API_URL + APPEAL_DETAILS_URL + appealId);
+      .get<Model>(API_URL + APPEAL_DETAILS + appealId);
   }
 
   getAppealsStatuses(): Observable<AppealStatuses> {
     return this.http
-      .get<AppealStatuses>(API_URL + APPEAL_STATUSES_URL);
+      .get<AppealStatuses>(API_URL + APPEAL_STATUSES);
   }
 
   getAppealTypesTree() {
     return this.http
-      .get<AppealType[]>(API_URL + APPEAL_TYPES_TREE_URL);
+      .get<AppealType[]>(API_URL + APPEAL_TYPES_TREE);
   }
 
   addAppeal(data: any) {
-    console.log(data);
+    return this.http
+      .post(API_URL + APPEAL_CREATE, data);
   }
 
   // User profile data
 
   private getUserProfileFromApi(): Observable<Model> {
     return this.http
-      .get<Model>(API_URL + PROFILE_URL);
+      .get<Model>(API_URL + PROFILE);
   }
 
-  private getUserProfileFromStorage() {
+  public getUserProfileFromStorage() {
     this.storage.get(USER_PROFILE_KEY).then(res => {
       if (res) {
         this.profile = res;
-      } else if (this.token) {
+      } else if (this.http.token) {
         this.getUserProfileFromApi().subscribe(response => {
           this.profile = response.model;
           return this.storage.set(USER_PROFILE_KEY, this.profile);
@@ -205,13 +268,20 @@ export class UkcApiService {
   }
 
   // LOCATIONS
+
   getLocations(filter: string) {
     return this.http
-      .get<AppealLocations>(API_URL + LOCATIONS_CITIES_URL + '?query=' + filter);
+      .get<AppealLocations>(API_URL + LOCATIONS_CITIES + '?query=' + filter);
   }
 
   getMe() {
     return this.http
-      .get<Model>(API_URL + ME_URL);
+      .get<Model>(API_URL + ME);
+  }
+
+  // Utils
+
+  formatDateTime(timestamp: number, format: string): string {
+    return formatDate(timestamp, format, 'uk-UA');
   }
 }

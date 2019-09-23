@@ -1,5 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import {UkcApiService} from '../../services/ukc-api.service';
+import {Profile} from '../../models/profile';
+import {FormBuilder, FormGroup, Validators} from '@angular/forms';
+import {PasswordValidator} from '../../validators/password-validator';
 
 @Component({
   selector: 'app-profile',
@@ -8,19 +11,82 @@ import {UkcApiService} from '../../services/ukc-api.service';
 })
 export class ProfilePage implements OnInit {
   me: any;
+  profile: Profile;
   passwordChangeVisible = false;
-  password: any;
-  passwordRepeat: any;
+  form: FormGroup;
+  error: any = {};
+  validationErrors = {
+    password: [
+      {type: 'required', message: 'Необхідно ввести пароль'},
+      {type: 'minlength', message: 'Довжина пароля - мінімум 8 символів'},
+      {type: 'maxlength', message: 'Довжина пароля - максимум 16 символів'},
+      {type: 'validPassword', message: 'Пароль повинен складатись з цифр, великих та маленьких латинських літер'}
+    ],
+    passwordRepeat: [
+      {type: 'required', message: 'Необхідно ввести пароль'},
+      {type: 'mustMatch', message: 'Паролі не співпадають'}
+    ]
+  };
 
-  constructor(public apiService: UkcApiService) { }
+  constructor(public apiService: UkcApiService, public formBuilder: FormBuilder) { }
 
   ngOnInit() {
     this.apiService.getMe().subscribe(response => {
       this.me = response.model;
     });
+    this.profile = this.apiService.getUserProfile();
+    this.form = this.formBuilder.group({
+      password: ['', Validators.compose([
+        Validators.minLength(8),
+        Validators.maxLength(16),
+        PasswordValidator.validPassword,
+        Validators.required
+      ])],
+      passwordRepeat: ['', Validators.required]
+    }, {
+      validator: PasswordValidator.mustMatch('password', 'passwordRepeat')
+    });
   }
 
-  savePassword() {
+  savePassword(value) {
+    if (this.form.invalid) {
+      Object.keys(this.form.controls).forEach(field => {
+        const control = this.form.get(field);
+        control.markAsTouched({ onlySelf: true });
+      });
+      return;
+    }
+    this.apiService.changePassword(value.password).subscribe(() => {
+    }, error => {
+      this.setError(error.errors);
+    });
+  }
 
+  setError(errors: any) {
+    for (const index in errors) {
+      if (errors.hasOwnProperty(index)) {
+        this.error[index] = '';
+        const count = errors[index].length;
+        for (let i = 0; i < count; i++) {
+          this.error[index] += errors[index][i].message;
+          if (i < count - 1) {
+            this.error[index] += '\n';
+          }
+        }
+      }
+    }
+  }
+
+  clearError() {
+    this.error = {};
+  }
+
+  getGenderName(gender: string) {
+    switch (gender) {
+      case 'MALE':
+        return 'Чоловвік';
+      case 'FEMALE':
+        return 'Жінка';
+    }
   }
 }
