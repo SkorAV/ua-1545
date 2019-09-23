@@ -61,12 +61,10 @@ class MyHTTP {
     }
     return new Observable<T>(observer => {
       this.nativeHttp.get(url, {}, headers).then(response => {
-        console.log(response);
         const parsedResponse = JSON.parse(response.data);
         observer.next(parsedResponse);
         observer.complete();
       }).catch(error => {
-        console.log(error);
         const parsedError = JSON.parse(error.error);
         observer.error(parsedError);
         observer.complete();
@@ -81,12 +79,10 @@ class MyHTTP {
     }
     return new Observable<T>(observer => {
       this.nativeHttp.post(url, data, headers).then(response => {
-        console.log(response);
         const parsedResponse = JSON.parse(response.data);
         observer.next(parsedResponse);
         observer.complete();
       }).catch(error => {
-        console.log(error);
         const parsedError = JSON.parse(error.error);
         observer.error(parsedError);
         observer.complete();

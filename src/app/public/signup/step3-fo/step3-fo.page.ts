@@ -193,7 +193,6 @@ export class Step3FoPage implements OnInit {
     this.apiService.stepThree(value).subscribe(() => {
       this.router.navigate(['signup', 'step4']);
     }, error => {
-      console.log(error.errors);
       this.setError(error.errors);
     });
   }

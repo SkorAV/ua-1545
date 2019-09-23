@@ -48,7 +48,6 @@ export class LoginPage implements OnInit {
       return;
     }
     this.apiService.login(value.email, value.password).subscribe((response) => {
-      console.log('got native:', response);
       this.apiService.saveToken(response.token);
     }, error => {
       this.setError(error.errors);
