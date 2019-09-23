@@ -11,6 +11,7 @@ import {AppealType} from '../models/appeal-type';
 import {AppealLocations} from '../models/appeal-locations';
 import {AppealStreets} from '../models/appeal-streets';
 import {HTTP} from '@ionic-native/http/ngx';
+import {LoadingService} from './loading.service';
 
 // storage keys
 const TOKEN_KEY = 'auth-token';
@@ -44,7 +45,7 @@ const LOCATIONS_STREETS = 'locations/streets/';
 class MyHTTP {
   private pToken: string = null;
 
-  constructor(private nativeHttp: HTTP) {}
+  constructor(private nativeHttp: HTTP, private loader: LoadingService) {}
 
   set token(value: string) {
     this.pToken = value;
@@ -59,6 +60,7 @@ class MyHTTP {
     if (this.token) {
       headers = {Authorization: this.token};
     }
+    this.loader.present({message: 'Синхронізація з серверомююю'});
     return new Observable<T>(observer => {
       this.nativeHttp.get(url, {}, headers).then(response => {
         const parsedResponse = JSON.parse(response.data);
@@ -68,6 +70,8 @@ class MyHTTP {
         const parsedError = JSON.parse(error.error);
         observer.error(parsedError);
         observer.complete();
+      }).finally(() => {
+        this.loader.dismiss();
       });
     });
   }
@@ -77,6 +81,7 @@ class MyHTTP {
     if (this.token) {
       headers = {Authorization: this.token};
     }
+    this.loader.present({message: 'Синхронізація з серверомююю'});
     return new Observable<T>(observer => {
       this.nativeHttp.post(url, data, headers).then(response => {
         const parsedResponse = JSON.parse(response.data);
@@ -86,6 +91,8 @@ class MyHTTP {
         const parsedError = JSON.parse(error.error);
         observer.error(parsedError);
         observer.complete();
+      }).finally(() => {
+        this.loader.dismiss();
       });
     });
   }
