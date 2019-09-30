@@ -48,7 +48,11 @@ export class LoginPage implements OnInit {
       return;
     }
     this.apiService.login(value.email, value.password).subscribe((response) => {
-      this.apiService.saveToken(response.token);
+      if (response.token !== null && typeof response.token !== 'undefined' && response.token.length > 0) {
+        this.apiService.saveToken(response.token);
+      } else {
+        this.setError({password: [{message: 'Сталася невідома помилка. Будь ласка, спробуйте пізніше!'}]});
+      }
     }, error => {
       this.setError(error.errors);
     });

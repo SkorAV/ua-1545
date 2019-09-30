@@ -119,9 +119,9 @@ export class UkcApiService {
 
   private checkToken() {
     return this.storage.get(TOKEN_KEY).then(res => {
-      if (res) {
-        this.authenticationState.next(true);
+      if (typeof res === 'string') {
         this.http.token = res;
+        this.authenticationState.next(true);
       }
     });
   }
@@ -129,17 +129,18 @@ export class UkcApiService {
   public saveToken(token: any) {
     token = 'JWT ' + token;
     this.http.token = token;
-    this.storage.set(TOKEN_KEY, token);
+    this.storage.set(TOKEN_KEY, token)
+      .then(() => {})
+      .catch(() => {});
     this.authenticationState.next(true);
     this.getUserProfileFromStorage();
   }
 
   logout() {
-    return this.storage.remove(TOKEN_KEY).then(() => {
+    return this.storage.clear().then(() => {
       this.authenticationState.next(false);
-      this.deleteUserProfileFromStorage();
       delete this.profile;
-      this.http.token = null;
+      delete this.http.token;
     });
   }
 
@@ -200,10 +201,6 @@ export class UkcApiService {
         });
       }
     });
-  }
-
-  private deleteUserProfileFromStorage() {
-    return this.storage.remove(USER_PROFILE_KEY);
   }
 
   getUserProfile() {

@@ -3,6 +3,7 @@ import {UkcApiService} from '../../services/ukc-api.service';
 import {Profile} from '../../models/profile';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {PasswordValidator} from '../../validators/password-validator';
+import {AlertController} from '@ionic/angular';
 
 @Component({
   selector: 'app-profile',
@@ -28,7 +29,11 @@ export class ProfilePage implements OnInit {
     ]
   };
 
-  constructor(public apiService: UkcApiService, public formBuilder: FormBuilder) { }
+  constructor(
+    public apiService: UkcApiService,
+    public formBuilder: FormBuilder,
+    public alert: AlertController
+  ) { }
 
   ngOnInit() {
     this.apiService.getMe().subscribe(response => {
@@ -56,7 +61,13 @@ export class ProfilePage implements OnInit {
       });
       return;
     }
-    this.apiService.changePassword(value.password).subscribe(() => {
+    this.apiService.changePassword(value.password).subscribe(async () => {
+      await this.alert.create({
+        header: 'Зміна пароля',
+        message: 'Пароль було успішно змінено. Будь ласка, увійдіть у додаток знову.',
+        buttons: ['OK']
+      });
+      await this.apiService.logout();
     }, error => {
       this.setError(error.errors);
     });

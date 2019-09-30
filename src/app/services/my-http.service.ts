@@ -9,10 +9,22 @@ import {Observable} from 'rxjs';
 export class MyHTTPService {
   private pToken: string = null;
 
-  constructor(private nativeHttp: HTTP, private loader: LoadingService) {}
+  constructor(private nativeHttp: HTTP, private loader: LoadingService) {
+  }
+
+  setCommonOptions() {
+    this.nativeHttp.setHeader('*', 'Content-Type', 'application/json');
+
+    this.nativeHttp.setHeader('*', 'Accept', 'application/json');
+    this.nativeHttp.setHeader('*', 'Cache-Control', 'no-cache');
+
+    this.nativeHttp.setDataSerializer('json');
+    this.nativeHttp.setRequestTimeout(30);
+  }
 
   set token(value: string) {
     this.pToken = value;
+    this.nativeHttp.setHeader('*', 'authorization', value);
   }
 
   get token(): string {
@@ -20,42 +32,56 @@ export class MyHTTPService {
   }
 
   public get<T>(url: string): Observable<any> {
-    let headers = {};
-    if (this.token) {
-      headers = {Authorization: this.token};
-    }
-    this.loader.present({message: 'Синхронізація з серверомююю'});
+    this.setCommonOptions();
     return new Observable<T>(observer => {
-      this.nativeHttp.get(url, {}, headers).then(response => {
-        const parsedResponse = JSON.parse(response.data);
-        observer.next(parsedResponse);
+      this.loader.present({message: 'Синхронізація з сервером...', duration: 30000});
+      this.nativeHttp.get(url, {}, {}).then(response => {
+        try {
+          const parsedResponse = JSON.parse(response.data);
+          observer.next(parsedResponse);
+        } catch (e) {
+          observer.error('JSON parsing error');
+        }
         observer.complete();
       }).catch(error => {
-        const parsedError = JSON.parse(error.error);
+        let parsedError = {};
+        try {
+          parsedError = JSON.parse(error.error);
+        } catch (e) {
+          parsedError = {json_parse_error: 'JSON Parse Error'};
+        }
         observer.error(parsedError);
         observer.complete();
       }).finally(() => {
+        observer.unsubscribe();
         this.loader.dismiss();
       });
     });
   }
 
   public post<T>(url: string, data: any = {}): Observable<any> {
-    let headers = {};
-    if (this.token) {
-      headers = {Authorization: this.token};
-    }
-    this.loader.present({message: 'Синхронізація з серверомююю'});
+    this.setCommonOptions();
     return new Observable<T>(observer => {
-      this.nativeHttp.post(url, data, headers).then(response => {
-        const parsedResponse = JSON.parse(response.data);
-        observer.next(parsedResponse);
+      this.loader.present({message: 'Синхронізація з сервером...', duration: 30000});
+      this.nativeHttp.post(url, data, {}).then(response => {
+        try {
+          const parsedResponse = JSON.parse(response.data);
+          observer.next(parsedResponse);
+        } catch (e) {
+          observer.error('JSON parsing error');
+        }
         observer.complete();
       }).catch(error => {
-        const parsedError = JSON.parse(error.error);
+        let parsedError = {};
+        try {
+          parsedError = JSON.parse(error.error);
+        } catch (e) {
+          parsedError = {json_parse_error: 'JSON Parse Error'};
+        }
         observer.error(parsedError);
         observer.complete();
       }).finally(() => {
+        observer.unsubscribe();
         this.loader.dismiss();
       });
     });

@@ -12,24 +12,21 @@ export class PhoneFormatDirective {
 
   constructor(public connectedInput: ElementRef) {}
 
-  @HostListener('ionKeydown', ['$event.key', '$event.target', '$event'])
-  @HostListener('keydown', ['$event.key', '$event.target', '$event'])
-  onKeyDown(key, target, event) {
+  @HostListener('input', ['$event'])
+  onInput(event) {
     event.preventDefault();
-    if (!/^[0-9]$|^Backspace$/.test(key)) {
-      return false;
-    }
-    if (key === 'Backspace') {
+    const key = event.data;
+    if (event.inputType === 'deleteContentBackward') {
       if (this.number.length > 0) {
         this.number = this.number.substring(0, this.number.length - 1);
       }
-    } else if (this.number.length < MAX_LENGTH) {
-      this.number += key;
+    } else if (/^[0-9]$/.test(key) && this.number.length < MAX_LENGTH) {
+      this.number = this.number.concat(key);
     }
-    target.value = this.applyFormatting();
+    event.target.value = this.applyFormatting();
     this.connectedInput.nativeElement.value = this.applyFormatting();
-    const pos = target.value.indexOf('_') > -1 ? target.value.indexOf('_') : 18;
-    target.setSelectionRange(pos, pos);
+    const pos = event.target.value.indexOf('_') > -1 ? event.target.value.indexOf('_') : 18;
+    event.target.setSelectionRange(pos, pos);
     return false;
   }
 
