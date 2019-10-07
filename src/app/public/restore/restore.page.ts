@@ -35,7 +35,8 @@ export class RestorePage implements OnInit {
       });
       return;
     }
-    this.apiService.restorePassword(value.email);
-    this.sent = true;
+    this.apiService.restorePassword(value.email).then(() => {
+      this.sent = true;
+    });
   }
 }

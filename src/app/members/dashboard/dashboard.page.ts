@@ -19,7 +19,9 @@ export class DashboardPage implements OnInit {
 
   @ViewChild(IonInfiniteScroll, {static: false}) infiniteScroll: IonInfiniteScroll;
 
-  constructor(private apiService: UkcApiService, private router: Router) {
+  constructor(
+    private apiService: UkcApiService,
+    private router: Router) {
   }
 
   ngOnInit() {
@@ -28,11 +30,16 @@ export class DashboardPage implements OnInit {
   }
 
   getAppeals(event?) {
-    this.apiService.getAppeals(this.pageNumber).subscribe(response => {
-      this.appealsData = this.appealsData.concat(response.collection);
-      this.metaData = response.meta;
-      if (event) {
-        event.target.complete();
+    this.apiService.getAppeals(this.pageNumber).then(response => {
+      try {
+        const data = JSON.parse(response.data);
+        this.appealsData = this.appealsData.concat(data.collection);
+        this.metaData = data.meta;
+        if (event) {
+          event.target.complete();
+        }
+      } catch (e) {
+        this.getAppeals(event);
       }
     });
   }
@@ -53,15 +60,20 @@ export class DashboardPage implements OnInit {
   }
 
   getAppealsStatuses() {
-    this.apiService.getAppealsStatuses().subscribe(response => {
-      this.appealsStatuses = response.collection;
+    this.apiService.getAppealsStatuses().then(response => {
+      try {
+        const data = JSON.parse(response.data);
+        this.appealsStatuses = data.collection;
 
-      const found = this.appealsStatuses.find(item => {
-        return (item.value === '' && item.label === '');
-      });
+        const found = this.appealsStatuses.find(item => {
+          return (item.value === '' && item.label === '');
+        });
 
-      if (found) {
-        found.label = 'Всі статуси';
+        if (found) {
+          found.label = 'Всі статуси';
+        }
+      } catch (e) {
+        this.getAppealsStatuses();
       }
     });
   }

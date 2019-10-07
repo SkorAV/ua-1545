@@ -3,7 +3,7 @@ import {UkcApiService} from '../../services/ukc-api.service';
 import {Profile} from '../../models/profile';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {PasswordValidator} from '../../validators/password-validator';
-import {AlertController} from '@ionic/angular';
+import {AlertController, Platform} from '@ionic/angular';
 
 @Component({
   selector: 'app-profile',
@@ -36,8 +36,11 @@ export class ProfilePage implements OnInit {
   ) { }
 
   ngOnInit() {
-    this.apiService.getMe().subscribe(response => {
-      this.me = response.model;
+    this.apiService.getMe().then(response => {
+      try {
+        const data = JSON.parse(response.data);
+        this.me = data.model;
+      } catch (e) { }
     });
     this.profile = this.apiService.getUserProfile();
     this.form = this.formBuilder.group({
@@ -61,15 +64,20 @@ export class ProfilePage implements OnInit {
       });
       return;
     }
-    this.apiService.changePassword(value.password).subscribe(async () => {
+    this.apiService.changePassword(value.password).then(async () => {
       await this.alert.create({
         header: 'Зміна пароля',
         message: 'Пароль було успішно змінено. Будь ласка, увійдіть у додаток знову.',
         buttons: ['OK']
       });
       await this.apiService.logout();
-    }, error => {
-      this.setError(error.errors);
+    }).catch(error => {
+      try {
+        const data = JSON.parse(error.error);
+        this.setError(data.errors);
+      } catch (e) {
+        this.setError({type: 'unknown', message: e.message});
+      }
     });
   }
 

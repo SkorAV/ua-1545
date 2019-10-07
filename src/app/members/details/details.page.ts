@@ -15,8 +15,13 @@ export class DetailsPage implements OnInit {
   }
 
   ngOnInit() {
-    this.apiService.getAppeal(this.activeRoute.snapshot.paramMap.get('id')).subscribe(response => {
-      this.appeal = response.model;
+    this.apiService.getAppeal(this.activeRoute.snapshot.paramMap.get('id')).then(response => {
+      try {
+        const data = JSON.parse(response.data);
+        this.appeal = data.model;
+      } catch (e) {
+        this.ngOnInit();
+      }
     });
   }
 

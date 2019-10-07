@@ -64,14 +64,19 @@ export class Step1Page implements OnInit {
       });
       return;
     }
-    this.apiService.stepOne(value.email, value.password).subscribe(() => {
+    this.apiService.stepOne(value.email, value.password).then(() => {
       const data = this.signupService.signupState.value;
       data.email = value.email;
       data.password = value.password;
       this.signupService.signupState.next(data);
       this.router.navigate(['signup', 'step2']);
-    }, error => {
-      this.setError(error.errors);
+    }).catch(error => {
+      try {
+        const data = JSON.parse(error.error);
+        this.setError(data.errors);
+      } catch (e) {
+        this.setError({type: 'unknown', message: e.message});
+      }
     });
   }
 

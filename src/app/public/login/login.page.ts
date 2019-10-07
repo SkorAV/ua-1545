@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import {UkcApiService} from '../../services/ukc-api.service';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
+import {Router} from '@angular/router';
 
 @Component({
   selector: 'app-login',
@@ -22,13 +23,10 @@ export class LoginPage implements OnInit {
     ]
   };
 
-  constructor(public apiService: UkcApiService, public formBuilder: FormBuilder) {
+  constructor(public apiService: UkcApiService, public formBuilder: FormBuilder, public router: Router) {
   }
 
   ngOnInit() {
-    if (this.apiService.isAuthenticated()) {
-      this.apiService.getUserProfileFromStorage();
-    }
     this.form = this.formBuilder.group({
       email: ['', Validators.compose([
         Validators.email, Validators.required
@@ -47,14 +45,28 @@ export class LoginPage implements OnInit {
       });
       return;
     }
-    this.apiService.login(value.email, value.password).subscribe((response) => {
-      if (response.token !== null && typeof response.token !== 'undefined' && response.token.length > 0) {
-        this.apiService.saveToken(response.token);
-      } else {
-        this.setError({password: [{message: 'Сталася невідома помилка. Будь ласка, спробуйте пізніше!'}]});
+    this.apiService.login(value.email, value.password).then(response => {
+      console.log(response);
+      try {
+        const data = JSON.parse(response.data);
+        if (data.token && data.token.length > 0) {
+          this.apiService.saveToken(data.token).then(() => {
+            this.router.navigate(['members', 'dashboard']);
+          });
+        } else {
+          this.setError({password: [{message: 'Сталася невідома помилка. Будь ласка, спробуйте пізніше!'}]});
+        }
+      } catch (e) {
+        this.setError({type: 'unknown', message: e.message});
       }
-    }, error => {
-      this.setError(error.errors);
+    }).catch(error => {
+      console.error(error);
+      try {
+        const data = JSON.parse(error.error);
+        this.setError(data.errors);
+      } catch (e) {
+        this.setError({type: 'unknown', message: e.message});
+      }
     });
   }
 

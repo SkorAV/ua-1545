@@ -1,6 +1,6 @@
 import {Component, OnInit} from '@angular/core';
-import { FormGroup } from '@angular/forms';
-import { Router } from '@angular/router';
+import {FormGroup} from '@angular/forms';
+import {Router} from '@angular/router';
 import {QuestionService} from './question/question.service';
 import {UkcApiService} from '../../services/ukc-api.service';
 import {AppealLocation} from '../../models/appeal-locations';
@@ -26,9 +26,13 @@ export class NewAppealPage implements OnInit {
   }
 
   ngOnInit() {
-    this.apiService.getAppealTypesTree().subscribe(response => {
-      this.question.typesTree = response;
-      this.question.setDefault();
+    this.apiService.getAppealTypesTree().then(response => {
+      try {
+        this.question.typesTree = JSON.parse(response.data);
+        this.question.setDefault();
+      } catch (e) {
+        this.ngOnInit();
+      }
     });
   }
 
@@ -46,8 +50,11 @@ export class NewAppealPage implements OnInit {
       this.locations = [];
       return;
     }
-    this.apiService.getLocations(value).subscribe(response => {
-      this.locations = response.collection;
+    this.apiService.getLocations(value).then(response => {
+      try {
+        const data = JSON.parse(response.data);
+        this.locations = data.collection;
+      } catch (e) {}
     });
   }
 
@@ -86,7 +93,7 @@ export class NewAppealPage implements OnInit {
       region_id: this.selectedLocation.id,
       source: null,
       type_id: this.question.selected.model.id
-    }).subscribe(() => {
+    }).then(() => {
       this.router.navigate(['members', 'dashboard']);
     });
   }

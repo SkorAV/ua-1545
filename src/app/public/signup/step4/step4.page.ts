@@ -24,7 +24,7 @@ export class Step4Page implements OnInit {
   }
 
   sendAgain() {
-    this.apiService.resendPassword(this.signupService.signupState.value.email).subscribe(() => {
+    this.apiService.resendPassword(this.signupService.signupState.value.email).then(() => {
       this.toast.create({
         header: 'Успіх',
         message: 'Лист для підтверження реєстрації було відправлено повторно',
