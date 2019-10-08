@@ -1,10 +1,10 @@
 import { Component } from '@angular/core';
 
-import {LoadingController, NavController, Platform, PopoverController, ToastController} from '@ionic/angular';
+import { NavController, Platform, ToastController} from '@ionic/angular';
 import { SplashScreen } from '@ionic-native/splash-screen/ngx';
 import { StatusBar } from '@ionic-native/status-bar/ngx';
 import { Router } from '@angular/router';
-import {UkcApiService} from './services/ukc-api.service';
+import { UkcApiService } from './services/ukc-api.service';
 
 @Component({
   selector: 'app-root',
@@ -53,10 +53,9 @@ export class AppComponent {
   presentToast() {
     this.toastCtrl.create({
       message: 'Натисніть ще раз, щоб вийти',
-      duration: 3000,
-      position: 'middle'
+      duration: 3000
     }).then(toast => {
-      return toast.present();
+      toast.present();
     });
   }
 }

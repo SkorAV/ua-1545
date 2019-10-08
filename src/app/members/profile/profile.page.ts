@@ -4,6 +4,7 @@ import {Profile} from '../../models/profile';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {PasswordValidator} from '../../validators/password-validator';
 import {AlertController, Platform} from '@ionic/angular';
+import {User} from '../../models/user';
 
 @Component({
   selector: 'app-profile',
@@ -11,8 +12,8 @@ import {AlertController, Platform} from '@ionic/angular';
   styleUrls: ['./profile.page.scss'],
 })
 export class ProfilePage implements OnInit {
-  me: any;
   profile: Profile;
+  me: User;
   passwordChangeVisible = false;
   form: FormGroup;
   error: any = {};
@@ -36,13 +37,32 @@ export class ProfilePage implements OnInit {
   ) { }
 
   ngOnInit() {
-    this.apiService.getMe().then(response => {
-      try {
-        const data = JSON.parse(response.data);
-        this.me = data.model;
-      } catch (e) { }
+    this.apiService.getUserProfileFromStorage().then(result => {
+      if (result) {
+        this.profile = result;
+      } else {
+        this.apiService.getUserProfileFromApi().then(response => {
+          try {
+            const data = JSON.parse(response.data);
+            this.profile = data.model;
+            return this.apiService.saveUserProfileToStorage(this.profile);
+          } catch (e) { }
+        });
+      }
     });
-    this.profile = this.apiService.getUserProfile();
+    this.apiService.getMeFromStorage().then(result => {
+      if (result) {
+        this.me = result;
+      } else {
+        this.apiService.getMeFromApi().then(response => {
+          try {
+            const data = JSON.parse(response.data);
+            this.me = data.model;
+            return this.apiService.saveMeToStorage(this.me);
+          } catch (e) { }
+        });
+      }
+    });
     this.form = this.formBuilder.group({
       password: ['', Validators.compose([
         Validators.minLength(8),

@@ -140,6 +140,7 @@
             (ionChange)="getStreet($event); streetSelect.setFocus();"
             [value]="selectedStreet?.model.name"
             (ionBlur)="validateStreetSelection()"
+            [disabled]="!selectedLocation"
         ></ion-input>
         <ion-list lines="none" *ngIf="streets.length > 0">
           <ion-item button detail class="dropdown-list" *ngFor="let street of streets" (click)="selectStreet(street)">

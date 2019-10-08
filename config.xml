@@ -3,7 +3,7 @@
     <name>Урядовий контактний центр</name>
     <description>Урядовий контактний центр | Урядова "гаряча лінія" 1545</description>
     <author email="support@ukc.gov.ua" href="https://ukc.gov.ua/">Державна установа «Урядовий контактний центр»</author>
-    <content original-src="index.html" src="http://localhost:8100" />
+    <content src="index.html" />
     <access origin="*" />
     <allow-intent href="http://*/*" />
     <allow-intent href="https://*/*" />

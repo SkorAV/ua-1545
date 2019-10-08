@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import {ActivatedRoute, Router} from '@angular/router';
 import {UkcApiService} from '../../services/ukc-api.service';
+import {AppealDetails} from '../../models/appeal';
 
 @Component({
   selector: 'app-details',
@@ -8,7 +9,7 @@ import {UkcApiService} from '../../services/ukc-api.service';
   styleUrls: ['./details.page.scss'],
 })
 export class DetailsPage implements OnInit {
-  appeal: any;
+  appeal: AppealDetails;
 
   // tslint:disable-next-line:max-line-length
   constructor(private activeRoute: ActivatedRoute, private router: Router, private apiService: UkcApiService) {

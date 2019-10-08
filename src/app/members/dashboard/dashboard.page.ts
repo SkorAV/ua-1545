@@ -3,6 +3,7 @@ import { UkcApiService } from '../../services/ukc-api.service';
 import {IonInfiniteScroll} from '@ionic/angular';
 import {Router} from '@angular/router';
 import {AppealStatus} from '../../models/appeal-status';
+import {Appeal, Meta} from '../../models/appeal';
 
 @Component({
   selector: 'app-dashboard',
@@ -10,11 +11,11 @@ import {AppealStatus} from '../../models/appeal-status';
   styleUrls: ['./dashboard.page.scss'],
 })
 export class DashboardPage implements OnInit {
-  appealsData = [];
+  appealsData: Appeal[] = [];
   appealsStatuses: AppealStatus[] = [];
   selectedStatus = '';
   numberFilter = '';
-  metaData: any;
+  metaData: Meta;
   pageNumber = 1;
 
   @ViewChild(IonInfiniteScroll, {static: false}) infiniteScroll: IonInfiniteScroll;
@@ -38,9 +39,7 @@ export class DashboardPage implements OnInit {
         if (event) {
           event.target.complete();
         }
-      } catch (e) {
-        this.getAppeals(event);
-      }
+      } catch (e) { }
     });
   }
 
@@ -55,6 +54,7 @@ export class DashboardPage implements OnInit {
   }
 
   refresh() {
+    this.appealsData = [];
     this.pageNumber = 1;
     this.getAppeals();
   }
@@ -72,9 +72,7 @@ export class DashboardPage implements OnInit {
         if (found) {
           found.label = 'Всі статуси';
         }
-      } catch (e) {
-        this.getAppealsStatuses();
-      }
+      } catch (e) { }
     });
   }
 

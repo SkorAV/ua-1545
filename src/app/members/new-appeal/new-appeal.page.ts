@@ -12,17 +12,13 @@ import {AppealLocation} from '../../models/appeal-locations';
 })
 export class NewAppealPage implements OnInit {
   public form: FormGroup;
-  public locations: AppealLocation[];
+  public locations: AppealLocation[] = [];
   public selectedLocation: AppealLocation;
-  appealText: any;
-  uploadFiles: any;
-  error = false;
+  appealText = '';
 
   constructor(private router: Router,
               public question: QuestionService,
               private apiService: UkcApiService) {
-    this.locations = [];
-    this.appealText = '';
   }
 
   ngOnInit() {
@@ -30,9 +26,7 @@ export class NewAppealPage implements OnInit {
       try {
         this.question.typesTree = JSON.parse(response.data);
         this.question.setDefault();
-      } catch (e) {
-        this.ngOnInit();
-      }
+      } catch (e) { }
     });
   }
 
@@ -54,7 +48,7 @@ export class NewAppealPage implements OnInit {
       try {
         const data = JSON.parse(response.data);
         this.locations = data.collection;
-      } catch (e) {}
+      } catch (e) { }
     });
   }
 

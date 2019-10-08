@@ -5,10 +5,12 @@ import {Storage} from '@ionic/storage';
 import {Profile} from '../models/profile';
 import {formatDate} from '@angular/common';
 import {HTTP} from '@ionic-native/http/ngx';
+import {User} from '../models/user';
 
 // storage keys
 const TOKEN_KEY = 'auth-token';
 const USER_PROFILE_KEY = 'user-profile';
+const ME_KEY = 'me';
 
 // urls
 const API_URL = 'https://ukc.gov.ua/backend/api/';
@@ -36,7 +38,6 @@ const LOCATIONS_STREETS = 'locations/streets/';
   providedIn: 'root'
 })
 export class UkcApiService {
-  public profile: Profile;
   private headers: any = {};
   private token: string = null;
 
@@ -118,7 +119,6 @@ export class UkcApiService {
         this.authenticationState.next(true);
         this.token = res;
         this.headers.authorization = res;
-        this.getUserProfileFromStorage();
       }
     });
   }
@@ -129,14 +129,11 @@ export class UkcApiService {
     this.token = token;
     await this.storage.set(TOKEN_KEY, token);
     this.headers.authorization = token;
-    this.getUserProfileFromStorage();
   }
 
   logout() {
     return this.storage.clear().then(() => {
       this.authenticationState.next(false);
-      delete this.profile;
-      delete this.token;
     });
   }
 
@@ -181,31 +178,29 @@ export class UkcApiService {
 
   // User profile data
 
-  private getUserProfileFromApi() {
+  getUserProfileFromApi() {
     return this.http
       .get(API_URL + PROFILE, {}, this.headers);
   }
 
-  public getUserProfileFromStorage() {
-    this.storage.get(USER_PROFILE_KEY).then(res => {
-      if (res) {
-        this.profile = res;
-      } else {
-        this.getUserProfileFromApi().then(response => {
-          try {
-            const data = JSON.parse(response.data);
-            this.profile = data.model;
-            return this.storage.set(USER_PROFILE_KEY, this.profile);
-          } catch (e) {
-            throw e;
-          }
-        });
-      }
-    });
+  getUserProfileFromStorage() {
+    return this.storage.get(USER_PROFILE_KEY);
   }
 
-  getUserProfile() {
-    return this.profile;
+  saveUserProfileToStorage(profile: Profile) {
+    return this.storage.set(USER_PROFILE_KEY, profile);
+  }
+
+  getMeFromApi() {
+    return this.http.get(API_URL + ME, {}, this.headers);
+  }
+
+  getMeFromStorage() {
+    return this.storage.get(ME_KEY);
+  }
+
+  saveMeToStorage(me: User) {
+    return this.storage.set(ME_KEY, me);
   }
 
   // LOCATIONS
@@ -213,11 +208,6 @@ export class UkcApiService {
   getLocations(filter: string) {
     return this.http
       .get(API_URL + LOCATIONS_CITIES + '?query=' + filter, {}, this.headers);
-  }
-
-  getMe() {
-    return this.http
-      .get(API_URL + ME, {}, this.headers);
   }
 
   // Utils

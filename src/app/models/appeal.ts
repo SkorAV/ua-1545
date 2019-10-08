@@ -32,11 +32,6 @@ export class Meta {
   itemsCount: number;
 }
 
-export class Appeals {
-  collection: Appeal[];
-  meta: Meta;
-}
-
 export class AppealDetails {
   id: any;
   // tslint:disable-next-line:variable-name

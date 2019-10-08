@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import {UkcApiService} from '../../services/ukc-api.service';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {Router} from '@angular/router';
+import {Profile} from '../../models/profile';
 
 @Component({
   selector: 'app-login',
@@ -22,6 +23,7 @@ export class LoginPage implements OnInit {
       {type: 'maxlength', message: 'Довжина пароля - максимум 16 символів'}
     ]
   };
+  profile: Profile;
 
   constructor(public apiService: UkcApiService, public formBuilder: FormBuilder, public router: Router) {
   }
@@ -46,11 +48,24 @@ export class LoginPage implements OnInit {
       return;
     }
     this.apiService.login(value.email, value.password).then(response => {
-      console.log(response);
+      // console.log(response);
       try {
         const data = JSON.parse(response.data);
         if (data.token && data.token.length > 0) {
           this.apiService.saveToken(data.token).then(() => {
+            this.apiService.getUserProfileFromStorage().then(result => {
+              if (result) {
+                this.profile = result;
+              } else {
+                this.apiService.getUserProfileFromApi().then(profile => {
+                  try {
+                    const profileData = JSON.parse(profile.data);
+                    this.profile = profileData.model;
+                    return this.apiService.saveUserProfileToStorage(this.profile);
+                  } catch (e) { }
+                });
+              }
+            });
             this.router.navigate(['members', 'dashboard']);
           });
         } else {
@@ -60,7 +75,7 @@ export class LoginPage implements OnInit {
         this.setError({type: 'unknown', message: e.message});
       }
     }).catch(error => {
-      console.error(error);
+      // console.error(error);
       try {
         const data = JSON.parse(error.error);
         this.setError(data.errors);
