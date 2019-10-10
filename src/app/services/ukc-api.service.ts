@@ -4,8 +4,8 @@ import {Platform} from '@ionic/angular';
 import {Storage} from '@ionic/storage';
 import {Profile} from '../models/profile';
 import {formatDate} from '@angular/common';
-import {HTTP} from '@ionic-native/http/ngx';
 import {User} from '../models/user';
+import {HTTP} from '@ionic-native/http/ngx';
 
 // storage keys
 const TOKEN_KEY = 'auth-token';
@@ -49,6 +49,7 @@ export class UkcApiService {
     private plt: Platform
   ) {
     this.plt.ready().then(() => {
+      this.http.setDataSerializer('json');
       return this.checkToken();
     });
   }
@@ -108,7 +109,6 @@ export class UkcApiService {
   // Authentication
 
   public login(email: string, password: string) {
-    this.http.setDataSerializer('json');
     return this.http
       .post(API_URL + AUTH_URL, {email, password}, this.headers);
   }
@@ -214,5 +214,10 @@ export class UkcApiService {
 
   formatDateTime(timestamp: number, format: string): string {
     return formatDate(timestamp, format, 'uk-UA');
+  }
+
+  async cacheExpired(cacheKey, TTL = 3600): Promise<boolean> {
+    const timestamp = await this.storage.get(cacheKey + '_time');
+    return (timestamp && timestamp + TTL * 1000 < Date.now());
   }
 }

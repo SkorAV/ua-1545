@@ -51,7 +51,7 @@
   <ion-grid>
     <ion-row>
       <ion-col>
-        <p>Ви увійшли як {{ apiService?.profile?.name + " " + apiService?.profile?.surname }}</p>
+        <p>Ви увійшли як {{ profile?.name + " " + profile?.surname }}</p>
         <a (click)="apiService.logout()" href>Вийти</a>
       </ion-col>
     </ion-row>
