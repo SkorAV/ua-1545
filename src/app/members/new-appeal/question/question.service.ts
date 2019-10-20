@@ -1,6 +1,4 @@
 import { Injectable } from '@angular/core';
-import {UkcApiService} from '../../../services/ukc-api.service';
-import {forEach} from '@angular-devkit/schematics';
 import {AppealType, AppealTypeModel} from '../../../models/appeal-type';
 
 @Injectable({

@@ -1,11 +1,12 @@
 <ion-header>
   <ion-toolbar color="primary">
     <ion-buttons slot="start">
+      <ion-menu-button></ion-menu-button>
+    </ion-buttons>
+    <ion-title>Реєстрація</ion-title>
+    <ion-buttons slot="end">
       <ion-back-button defaultHref="/signup/step2"></ion-back-button>
     </ion-buttons>
-    <ion-title>
-      Реєстрація
-    </ion-title>
   </ion-toolbar>
 </ion-header>
 
@@ -140,6 +141,7 @@
             (ionChange)="getStreet($event); streetSelect.setFocus();"
             [value]="selectedStreet?.model.name"
             (ionBlur)="validateStreetSelection()"
+            [disabled]="!selectedLocation"
         ></ion-input>
         <ion-list lines="none" *ngIf="streets.length > 0">
           <ion-item button detail class="dropdown-list" *ngFor="let street of streets" (click)="selectStreet(street)">
@@ -167,3 +169,12 @@
     <p><ion-button type="submit">Продовжити <ion-icon slot="end" name="arrow-forward"></ion-icon></ion-button></p>
   </form>
 </ion-content>
+
+<ion-footer>
+  <ion-toolbar color="primary" text-center>
+    <ion-title>
+      <p>© 2019 Державна установа</p>
+      <p>«Урядовий контактний центр»</p>
+    </ion-title>
+  </ion-toolbar>
+</ion-footer>

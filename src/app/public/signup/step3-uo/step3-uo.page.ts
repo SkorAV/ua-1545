@@ -67,9 +67,14 @@ export class Step3UoPage implements OnInit {
       {type: 'required', message: 'Необхідно заповнити "Вулиця"'}
     ],
     phone: [
-      {type: 'required', message: 'Необхідно заповнити "Контактний телефон"'}
+      {type: 'required', message: 'Необхідно заповнити "Контактний телефон"'},
+      {type: 'pattern', message: 'Введено неправильний телефон'}
+    ],
+    additional_phone: [
+      {type: 'pattern', message: 'Введено неправильний телефон'}
     ]
   };
+  phonePattern = Validators.pattern(/^\+380\([0-9]{2}\) [0-9]{3}-[0-9]{2}-[0-9]{2}$/);
   toggled = false;
 
   constructor(
@@ -120,16 +125,23 @@ export class Step3UoPage implements OnInit {
       fact_street_external_id: '',
       fact_building: '',
       fact_flat: '',
-      phone: ['', Validators.required],
-      additional_phone: '',
+      phone: ['', Validators.compose([
+        Validators.required,
+        this.phonePattern
+      ])],
+      additional_phone: ['', this.phonePattern],
       email: '',
       password: ''
     });
-    this.apiService.responsibleArea().subscribe(result => {
-      this.areas = result;
+    this.apiService.responsibleArea().then(result => {
+      try {
+        this.areas = JSON.parse(result.data);
+      } catch (e) { }
     });
-    this.apiService.ownershipTypes().subscribe( result => {
-      this.organizationForms = result;
+    this.apiService.ownershipTypes().then( result => {
+      try {
+        this.organizationForms = JSON.parse(result.data);
+      } catch (e) { }
     });
     this.locations = [];
     this.streets = [];
@@ -137,6 +149,9 @@ export class Step3UoPage implements OnInit {
 
   getLocation($event) {
     const value = $event.detail.value;
+    if (value.length < 2) {
+      return;
+    }
     if (value.indexOf(',') > -1) {
       return;
     }
@@ -144,13 +159,19 @@ export class Step3UoPage implements OnInit {
       this.locations = [];
       return;
     }
-    this.apiService.getLocations(value).subscribe(response => {
-      this.locations = response.collection;
+    this.apiService.getLocations(value).then(response => {
+      try {
+        const data = JSON.parse(response.data);
+        this.locations = data.collection;
+      } catch (e) { }
     });
   }
 
   getFactLocation($event) {
     const value = $event.detail.value;
+    if (value.length < 2) {
+      return;
+    }
     if (value.indexOf(',') > -1) {
       return;
     }
@@ -158,8 +179,11 @@ export class Step3UoPage implements OnInit {
       this.locations = [];
       return;
     }
-    this.apiService.getLocations(value).subscribe(response => {
-      this.locations = response.collection;
+    this.apiService.getLocations(value).then(response => {
+      try {
+        const data = JSON.parse(response.data);
+        this.locations = data.collection;
+      } catch (e) { }
     });
   }
 
@@ -221,23 +245,35 @@ export class Step3UoPage implements OnInit {
 
   getStreet($event: CustomEvent) {
     const value = $event.detail.value;
+    if (value.length < 2) {
+      return;
+    }
     if (value === '' || !this.selectedLocation || (this.selectedStreet && value === this.selectedStreet.model.name)) {
       this.streets = [];
       return;
     }
-    this.apiService.cityStreets(this.selectedLocation.id, value).subscribe(response => {
-      this.streets = response.collection;
+    this.apiService.cityStreets(this.selectedLocation.id, value).then(response => {
+      try {
+        const data = JSON.parse(response.data);
+        this.streets = data.collection;
+      } catch (e) { }
     });
   }
 
   getFactStreet($event: CustomEvent) {
     const value = $event.detail.value;
+    if (value.length < 2) {
+      return;
+    }
     if (value === '' || !this.selectedFactLocation || (this.selectedFactStreet && value === this.selectedFactStreet.model.name)) {
       this.streets = [];
       return;
     }
-    this.apiService.cityStreets(this.selectedFactLocation.id, value).subscribe(response => {
-      this.streets = response.collection;
+    this.apiService.cityStreets(this.selectedFactLocation.id, value).then(response => {
+      try {
+        const data = JSON.parse(response.data);
+        this.streets = data.collection;
+      } catch (e) { }
     });
   }
 
@@ -298,10 +334,15 @@ export class Step3UoPage implements OnInit {
     }
     value.email = this.signupService.signupState.value.email;
     value.password = this.signupService.signupState.value.password;
-    this.apiService.stepThree(value).subscribe(() => {
+    this.apiService.stepThree(value).then(() => {
       this.router.navigate(['signup', 'step4']);
-    }, error => {
-      this.setError(error.errors);
+    }).catch(error => {
+      try {
+        const data = JSON.parse(error.error);
+        this.setError(data.errors);
+      } catch (e) {
+        this.setError({type: 'unknown', message: e.message});
+      }
     });
   }
 

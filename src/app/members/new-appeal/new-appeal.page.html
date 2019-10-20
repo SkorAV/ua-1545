@@ -1,16 +1,9 @@
 <ion-header>
   <ion-toolbar color="primary">
-    <ion-buttons slot="end">
-      <ion-button routerLink="/members/profile">
-        <ion-icon slot="icon-only" name="person"></ion-icon>
-      </ion-button>
+    <ion-buttons slot="start">
+      <ion-menu-button></ion-menu-button>
     </ion-buttons>
     <ion-title>Створення нового звернення</ion-title>
-    <ion-buttons slot="start">
-      <ion-button routerLink="/">
-        <ion-icon slot="icon-only" name="home"></ion-icon>
-      </ion-button>
-    </ion-buttons>
   </ion-toolbar>
 </ion-header>
 
@@ -51,8 +44,32 @@
       ></ion-textarea>
     </ion-item>
     <p><small>Доступна кількість символів: {{ 2500 - appealText.length }}</small></p>
+    <ion-item>
+      <ion-list>
+        <ion-item *ngFor="let f of files; index as i">
+          <ion-icon name="trash" (click)="removeFile(i)" slot="end"></ion-icon>
+          {{f.name}}
+        </ion-item>
+      </ion-list>
+    </ion-item>
+    <section>
+      <ion-button *ngIf="files.length < 5" expand="block" (click)="chooseFile()">Додати файли</ion-button>
+      <ion-text *ngIf="uploadError" color="danger">{{ uploadError }}</ion-text>
+    </section>
+    <ion-item>
+      <ion-text><small>До звернення можливо долучити 5 файлів з допустимим розширенням: pdf, doc, docx, xls, xlsx, rtf, txt, jpeg , jpg, bmp, png, tiff. Розмір кожного файлу не повинен перевищувати 5Мб.</small></ion-text>
+    </ion-item>
   </ion-list>
   <section>
     <ion-button expand="block" [disabled]="!question.selected || !selectedLocation || appealText.length < 1" (click)="sendAppeal()">Відправити звернення</ion-button>
   </section>
 </ion-content>
+
+<ion-footer>
+  <ion-toolbar color="primary" text-center>
+    <ion-title>
+      <p>© 2019 Державна установа</p>
+      <p>«Урядовий контактний центр»</p>
+    </ion-title>
+  </ion-toolbar>
+</ion-footer>

@@ -1,0 +1,87 @@
+<ion-header>
+  <ion-toolbar color="primary">
+    <ion-buttons slot="start">
+      <ion-menu-button></ion-menu-button>
+    </ion-buttons>
+    <ion-title>Інформація</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-segment #pageSelect value="about">
+  <ion-segment-button value="about">
+    <ion-label>Про додаток</ion-label>
+  </ion-segment-button>
+  <ion-segment-button value="contacts">
+    <ion-label>Контактна інформація</ion-label>
+  </ion-segment-button>
+</ion-segment>
+<ion-content padding>
+  <ion-list lines="none" *ngIf="pageSelect.value === 'contacts'">
+    <ion-label color="primary" class="ion-text-wrap my-label">
+      Державна установа «Урядовий контактний центр»
+    </ion-label>
+    <ion-item>
+      <ion-text>
+        <p>01001, м. Київ, вул. Еспланадна, 8/10</p>
+        <p>Email: <a href="mailto:1545@ukc.gov.ua">1545@ukc.gov.ua</a></p>
+      </ion-text>
+    </ion-item>
+    <ion-label color="primary" class="ion-text-wrap my-label">
+      Урядова “гаряча лінія” 1545
+    </ion-label>
+    <ion-item>
+      <ion-text>
+        <p>Працює цілодобово.</p>
+        <p>Дзвінки з мережі фіксованого зв’язку Укртелекому, телефонів мобільних операторів Київстар, Vodafone Україна, Лайфселл для заявників безкоштовні.</p>
+      </ion-text>
+    </ion-item>
+    <ion-label color="primary" class="ion-text-wrap my-label">
+      Урядова “гаряча лінія” +38 (044) 284-19-15
+    </ion-label>
+    <ion-item>
+      <ion-text>
+        <p>Працює цілодобово. Для громадян України, які перебувають за кордоном.</p>
+        <p>Оплата за тарифами відповідного оператора зв’язку</p>
+      </ion-text>
+    </ion-item>
+    <ion-label color="primary" class="ion-text-wrap my-label">
+      “Гаряча лінія” для кандидатів на посади фахівців з питань реформ<br/>
+      (044) 284-19-64
+    </ion-label>
+    <ion-item>
+      <ion-text>
+        <p>Пн-Чт 9:00 – 18:00</p>
+        <p>Пт 9:00 – 16:45</p>
+      </ion-text>
+    </ion-item>
+    <ion-label color="primary" class="ion-text-wrap my-label">
+      “Гаряча лінія” для підприємців 0 800 503 045
+    </ion-label>
+    <ion-item>
+      <ion-text>
+        <p>Пн-Чт 9:00 – 18:00</p>
+        <p>Пт 9:00 – 16:45</p>
+      </ion-text>
+    </ion-item>
+  </ion-list>
+  <ion-list lines="none" *ngIf="pageSelect.value === 'about'">
+    <ion-item>
+      {{ appName }}
+    </ion-item>
+    <ion-item>
+      Версія&nbsp;<strong>{{ version }}</strong>
+    </ion-item>
+    <ion-item>
+      © 2019 Державна установа "Урядовий контактний центр"
+    </ion-item>
+  </ion-list>
+</ion-content>
+
+<ion-footer>
+  <ion-toolbar color="primary" text-center>
+    <ion-title>
+      <p>© 2019 Державна установа</p>
+      <p>«Урядовий контактний центр»</p>
+    </ion-title>
+  </ion-toolbar>
+</ion-footer>

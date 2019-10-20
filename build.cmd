@@ -1,5 +1,10 @@
+# run once to generate the key
 "%java_home%\bin\keytool" -genkey -v -keystore ukc-release-key.keystore -alias ukc -keyalg RSA -keysize 2048 -validity 10000
 
+# debug
+ionic cordova run android --device -l --debug
+
+# build
 ionic cordova build android --release --prod
 "%java_home%\bin\jarsigner" -verbose -sigalg SHA1withRSA -digestalg SHA1 -keystore ukc-release-key.keystore c:\Users\Andrii\ionic\ukc\platforms\android\app\build\outputs\apk\release\app-release-unsigned.apk ukc
 del c:\Users\Andrii\ionic\ukc\platforms\android\app\build\outputs\apk\release\ukc.apk

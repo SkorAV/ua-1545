@@ -8,6 +8,11 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { HTTP } from '@ionic-native/http/ngx';
 import { IonicStorageModule } from '@ionic/storage';
+import { InAppBrowser } from '@ionic-native/in-app-browser/ngx';
+import { Chooser } from '@ionic-native/chooser/ngx';
+import { FilePath } from '@ionic-native/file-path/ngx';
+import { FileTransfer } from '@ionic-native/file-transfer/ngx';
+import { AppVersion } from '@ionic-native/app-version/ngx';
 
 import {registerLocaleData} from '@angular/common';
 import localeUa from '@angular/common/locales/ru-UA';
@@ -31,7 +36,12 @@ registerLocaleData(localeUa, 'uk-UA', localeUaExtra);
     StatusBar,
     SplashScreen,
     {provide: RouteReuseStrategy, useClass: IonicRouteStrategy},
-    HTTP
+    HTTP,
+    InAppBrowser,
+    Chooser,
+    FilePath,
+    FileTransfer,
+    AppVersion
   ],
   bootstrap: [AppComponent]
 })
