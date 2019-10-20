@@ -4,6 +4,11 @@ import {Router} from '@angular/router';
 import {QuestionService} from './question/question.service';
 import {UkcApiService} from '../../services/ukc-api.service';
 import {AppealLocation} from '../../models/appeal-locations';
+import {Chooser} from '@ionic-native/chooser/ngx';
+import {FilePath} from '@ionic-native/file-path/ngx';
+import {Platform} from '@ionic/angular';
+import {FileInfo} from '../../models/file-info';
+import {LoadingService} from '../../services/loading.service';
 
 @Component({
   selector: 'app-new-appeal',
@@ -15,10 +20,19 @@ export class NewAppealPage implements OnInit {
   public locations: AppealLocation[] = [];
   public selectedLocation: AppealLocation;
   appealText = '';
+  files: FileInfo[] = [];
+  uploadError: any = null;
+  fileMaxSize = 5 * 1024 * 10024; // 5 Mb
 
-  constructor(private router: Router,
-              public question: QuestionService,
-              private apiService: UkcApiService) {
+  constructor(
+    private router: Router,
+    public question: QuestionService,
+    private apiService: UkcApiService,
+    private chooser: Chooser,
+    private filepath: FilePath,
+    private platform: Platform,
+    private loader: LoadingService
+  ) {
   }
 
   ngOnInit() {
@@ -77,6 +91,10 @@ export class NewAppealPage implements OnInit {
   }
 
   sendAppeal() {
+    const fileIds = [];
+    this.files.map(value => {
+      fileIds.push(value.id);
+    });
     this.apiService.addAppeal({
       content: this.appealText,
       region: {
@@ -86,9 +104,85 @@ export class NewAppealPage implements OnInit {
       },
       region_id: this.selectedLocation.id,
       source: null,
-      type_id: this.question.selected.model.id
+      type_id: this.question.selected.model.id,
+      files: fileIds
     }).then(() => {
       this.router.navigate(['members', 'dashboard']);
     });
+  }
+
+  chooseFile() {
+    this.chooser.getFile().then((result) => {
+      if (typeof result !== 'undefined') {
+        this.processFile(result);
+      }
+    }).catch(error => {
+      this.processFile(error);
+    });
+  }
+
+  async processFile(data) {
+    this.uploadError = null;
+    console.log(data);
+    let found = false;
+    this.files.forEach(item => {
+      if (item.name === data.name) {
+        found = true;
+        return;
+      }
+    });
+    if (found) {
+      return;
+    }
+    const acceptTypes = [
+      'pdf',
+      'doc',
+      'docx',
+      'xls',
+      'xlsx',
+      'rtf',
+      'txt',
+      'jpeg',
+      'jpg',
+      'bmp',
+      'png',
+      'tiff'
+    ];
+    if (acceptTypes.indexOf(data.name.split('.').pop()) === -1) {
+      this.uploadError = 'Цей тип файлів не підтримується!';
+      return;
+    }
+
+    if (data.data.length > this.fileMaxSize) {
+      this.uploadError = 'Файл занадто великий! Оберіть файл розміром до 5 Мб.';
+      return;
+    }
+
+    let path = data.uri;
+
+    if (this.platform.is('android')) {
+      path = await this.filepath.resolveNativePath(data.uri);
+    }
+
+    console.log(path);
+
+    this.loader.present({
+      message: 'Завантаження файла на сервер...'
+    });
+    this.apiService.uploadFile(path).then(result => {
+      const parsedResponse = JSON.parse(result.response);
+      this.files.push({
+        name: data.name,
+        id: parsedResponse.image.id
+      } as FileInfo);
+      this.loader.dismiss();
+    }).catch(error => {
+      console.error(error);
+      this.loader.dismiss();
+    });
+  }
+
+  removeFile(index) {
+    this.files.splice(index, 1);
   }
 }

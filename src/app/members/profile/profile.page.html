@@ -1,9 +1,9 @@
 <ion-header>
   <ion-toolbar color="primary">
-    <ion-title>Профіль</ion-title>
     <ion-buttons slot="start">
-      <ion-back-button routerLink="/members/dashboard"></ion-back-button>
+      <ion-menu-button></ion-menu-button>
     </ion-buttons>
+    <ion-title>Профіль</ion-title>
   </ion-toolbar>
 </ion-header>
 
@@ -22,10 +22,10 @@
       <p>{{ me?.email }}</p>
     </ion-item>
     <section>
-      <ion-button expand="block" (click)="passwordChangeVisible = true">Змінити пароль</ion-button>
+      <ion-button expand="block" routerLink="/members/change-password" routerDirection="forward">Змінити пароль</ion-button>
     </section>
   </ion-list>
-  <ion-list *ngIf="pageSelect.value === 'personal'">
+  <ion-list lines="none" *ngIf="pageSelect.value === 'personal'">
     <ion-item>
       <ion-label position="stacked">Прізвище:</ion-label>
       <p>{{ profile?.surname }}</p>
@@ -78,38 +78,6 @@
       <ion-label position="stacked">Квартира:</ion-label>
       <p>{{ profile?.flat }}</p>
     </ion-item>
-  </ion-list>
-  <ion-list lines="none" *ngIf="passwordChangeVisible">
-    <form [formGroup]="form" (ngSubmit)="savePassword(form.value)">
-      <ion-item>
-        <ion-label position="floating">Новий пароль</ion-label>
-        <ion-input type="password" formControlName="password"></ion-input>
-      </ion-item>
-      <p class="validation-error" *ngIf="error && error.password">{{ error.password }}</p>
-      <div class="validation-errors">
-        <ng-container *ngFor="let validation of validationErrors.password">
-          <p class="validation-error" *ngIf="form.get('password').hasError(validation.type) && (form.get('password').dirty || form.get('password').touched)">
-            {{ validation.message }}
-          </p>
-        </ng-container>
-      </div>
-      <ion-item lines="none">
-        <ion-label position="floating">Повторно пароль</ion-label>
-        <ion-input type="password" formControlName="passwordRepeat"></ion-input>
-      </ion-item>
-      <p padding-start class="validation-error" *ngIf="error && error.passwordRepeat">{{ error.passwordRepeat }}</p>
-      <div class="validation-errors">
-        <ng-container *ngFor="let validation of validationErrors.passwordRepeat">
-          <p class="validation-error" *ngIf="form.get('passwordRepeat').hasError(validation.type) && (form.get('passwordRepeat').dirty || form.get('passwordRepeat').touched)">
-            {{ validation.message }}
-          </p>
-        </ng-container>
-      </div>
-      <section>
-        <ion-button type="submit" slot="start">Зберегти</ion-button>
-        <ion-button (click)="passwordChangeVisible = false" type="reset" slot="end">Відмінити</ion-button>
-      </section>
-    </form>
   </ion-list>
 </ion-content>
 

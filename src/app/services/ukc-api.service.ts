@@ -6,6 +6,7 @@ import {Profile} from '../models/profile';
 import {formatDate} from '@angular/common';
 import {User} from '../models/user';
 import {HTTP} from '@ionic-native/http/ngx';
+import { FileTransfer, FileUploadOptions } from '@ionic-native/file-transfer/ngx';
 
 // storage keys
 const TOKEN_KEY = 'auth-token';
@@ -33,6 +34,7 @@ const CHANGE_PASSWORD = 'profile/password';
 const APPEAL_TYPES_TREE = 'misc/appeal-types-tree';
 const LOCATIONS_CITIES = 'locations/cities';
 const LOCATIONS_STREETS = 'locations/streets/';
+const UPLOAD_FILES = 'files/document';
 
 @Injectable({
   providedIn: 'root'
@@ -46,7 +48,8 @@ export class UkcApiService {
   constructor(
     private http: HTTP,
     public storage: Storage,
-    private plt: Platform
+    private plt: Platform,
+    private ft: FileTransfer
   ) {
     this.plt.ready().then(() => {
       this.http.setDataSerializer('json');
@@ -118,7 +121,7 @@ export class UkcApiService {
       if (typeof res === 'string') {
         this.authenticationState.next(true);
         this.token = res;
-        this.headers.authorization = res;
+        this.headers.Authorization = res;
       }
     });
   }
@@ -128,7 +131,7 @@ export class UkcApiService {
     this.authenticationState.next(true);
     this.token = token;
     await this.storage.set(TOKEN_KEY, token);
-    this.headers.authorization = token;
+    this.headers.Authorization = token;
   }
 
   logout() {
@@ -169,6 +172,18 @@ export class UkcApiService {
   getAppealTypesTree() {
     return this.http
       .get(API_URL + APPEAL_TYPES_TREE, {}, this.headers);
+  }
+
+  uploadFile(url: string) {
+    const fileName = url.substring(url.lastIndexOf('/') + 1);
+    const options: FileUploadOptions = {
+      fileKey: 'file',
+      fileName,
+      headers: this.headers
+    };
+    return this.ft
+      .create()
+      .upload(url, API_URL + UPLOAD_FILES, options);
   }
 
   addAppeal(data: any) {

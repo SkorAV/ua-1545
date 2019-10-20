@@ -1,12 +1,10 @@
 <ion-header>
   <ion-toolbar color="primary">
-    <ion-buttons slot="end">
-      <ion-button routerLink="/members/profile">
-        <ion-icon slot="icon-only" name="person"></ion-icon>
-      </ion-button>
+    <ion-buttons slot="start">
+      <ion-menu-button></ion-menu-button>
     </ion-buttons>
     <ion-title>№ {{ appeal?.external_id }}</ion-title>
-    <ion-buttons slot="start">
+    <ion-buttons slot="end">
       <ion-back-button routerLink="/members/dashboard"></ion-back-button>
     </ion-buttons>
   </ion-toolbar>
@@ -35,6 +33,14 @@
     <ion-label>
         <h3>Відповідь</h3>
         <p class="ion-text-wrap">{{ appeal?.decision }}</p>
+    </ion-label>
+  </ion-item>
+  <ion-item *ngIf="appeal.documents.length > 0">
+    <ion-label>
+      <h3>Прикріплені файли</h3>
+      <p *ngFor="let file of appeal.documents">
+        <a (click)="show(file.url)" [routerLink]="router.url">{{file.name}}</a>
+      </p>
     </ion-label>
   </ion-item>
 

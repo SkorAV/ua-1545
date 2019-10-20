@@ -12,17 +12,42 @@ const routes: Routes = [
     path: 'login',
     loadChildren: './public/login/login.module#LoginPageModule'
   },
-  { path: 'signup/step1', loadChildren: './public/signup/step1/step1.module#Step1PageModule' },
-  { path: 'signup/step2', loadChildren: './public/signup/step2/step2.module#Step2PageModule' },
-  { path: 'signup/step3-fo', loadChildren: './public/signup/step3-fo/step3-fo.module#Step3FoPageModule' },
-  { path: 'signup/step3-uo', loadChildren: './public/signup/step3-uo/step3-uo.module#Step3UoPageModule' },
-  { path: 'signup/step4', loadChildren: './public/signup/step4/step4.module#Step4PageModule' },
+  {
+    path: 'signup',
+    redirectTo: 'signup/step1',
+    pathMatch: 'full'
+  },
+  {
+    path: 'signup/step1',
+    loadChildren: './public/signup/step1/step1.module#Step1PageModule'
+  },
+  {
+    path: 'signup/step2',
+    loadChildren: './public/signup/step2/step2.module#Step2PageModule'
+  },
+  {
+    path: 'signup/step3-fo',
+    loadChildren: './public/signup/step3-fo/step3-fo.module#Step3FoPageModule'
+  },
+  {
+    path: 'signup/step3-uo',
+    loadChildren: './public/signup/step3-uo/step3-uo.module#Step3UoPageModule'
+  },
+  {
+    path: 'signup/step4',
+    loadChildren: './public/signup/step4/step4.module#Step4PageModule'
+  },
   {
     path: 'members',
     canActivate: [AuthGuard],
     loadChildren: './members/member-routing.module#MemberRoutingModule'
   },
-  { path: 'restore', loadChildren: './public/restore/restore.module#RestorePageModule' }
+  {
+    path: 'restore',
+    loadChildren: './public/restore/restore.module#RestorePageModule'
+  },
+  { path: 'help', loadChildren: './public/help/help.module#HelpPageModule' },
+  { path: 'about', loadChildren: './public/about/about.module#AboutPageModule' }
 ];
 @NgModule({
   imports: [

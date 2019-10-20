@@ -3,6 +3,7 @@ import {ActivatedRoute, Router} from '@angular/router';
 import {UkcApiService} from '../../services/ukc-api.service';
 import {AppealDetails} from '../../models/appeal';
 import {LoadingService} from '../../services/loading.service';
+import {InAppBrowser} from '@ionic-native/in-app-browser/ngx';
 
 const APPEAL_KEY = 'appeal_'; // ass the ID here
 
@@ -20,7 +21,8 @@ export class DetailsPage implements OnInit {
     private activeRoute: ActivatedRoute,
     private router: Router,
     private apiService: UkcApiService,
-    private loader: LoadingService) {
+    private loader: LoadingService,
+    private inAppBrowser: InAppBrowser) {
   }
 
   async ngOnInit() {
@@ -57,5 +59,9 @@ export class DetailsPage implements OnInit {
     this.apiService.storage.remove(APPEAL_KEY + this.appealId).then(() => {
       this.ngOnInit();
     });
+  }
+
+  show(url: string) {
+    const browser = this.inAppBrowser.create(url, '_system');
   }
 }

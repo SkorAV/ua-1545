@@ -3,7 +3,7 @@ import { Component } from '@angular/core';
 import { NavController, Platform, ToastController} from '@ionic/angular';
 import { SplashScreen } from '@ionic-native/splash-screen/ngx';
 import { StatusBar } from '@ionic-native/status-bar/ngx';
-import { Router } from '@angular/router';
+import { Router, RouterEvent } from '@angular/router';
 import { UkcApiService } from './services/ukc-api.service';
 
 @Component({
@@ -13,6 +13,60 @@ import { UkcApiService } from './services/ukc-api.service';
 })
 export class AppComponent {
   counter = 0;
+
+  pages = [
+    {
+      title: 'Увійти',
+      url: 'login',
+      authOnly: false
+    },
+    {
+      title: 'Зареєструватись',
+      url: 'signup',
+      authOnly: false
+    },
+    {
+      title: 'Відновити пароль',
+      url: 'restore',
+      authOnly: false
+    },
+    {
+      title: 'Мої звернення',
+      url: 'members/dashboard',
+      authOnly: true
+    },
+    {
+      title: 'Подати звернення',
+      url: 'members/new-appeal',
+      authOnly: true
+    },
+    {
+      title: 'Профіль',
+      url: 'members/profile',
+      authOnly: true
+    },
+    {
+      title: 'Змінити пароль',
+      url: 'members/change-password',
+      authOnly: true
+    },
+    {
+      title: 'Допомога',
+      url: 'help',
+      authOnly: null
+    },
+    {
+      title: 'Інформація',
+      url: 'about',
+      authOnly: null
+    },
+    {
+      title: 'Вихід',
+      url: 'login',
+      authOnly: true
+    },
+  ];
+  selectedUrl = '';
 
   constructor(
     private platform: Platform,
@@ -47,6 +101,9 @@ export class AppComponent {
           navigator['app'].exitApp();
         }
       });
+    });
+    router.events.subscribe((event: RouterEvent) => {
+      this.selectedUrl = event.url;
     });
   }
 

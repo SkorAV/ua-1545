@@ -29,6 +29,19 @@ export class LoginPage implements OnInit {
   }
 
   ngOnInit() {
+    this.apiService.getUserProfileFromStorage().then(result => {
+      if (result) {
+        this.profile = result;
+      } else {
+        this.apiService.getUserProfileFromApi().then(response => {
+          try {
+            const data = JSON.parse(response.data);
+            this.profile = data.model;
+            return this.apiService.saveUserProfileToStorage(this.profile);
+          } catch (e) { }
+        });
+      }
+    });
     this.form = this.formBuilder.group({
       email: ['', Validators.compose([
         Validators.email, Validators.required
@@ -72,7 +85,7 @@ export class LoginPage implements OnInit {
           this.setError({password: [{message: 'Сталася невідома помилка. Будь ласка, спробуйте пізніше!'}]});
         }
       } catch (e) {
-        this.setError({type: 'unknown', message: e.message});
+        this.setError({unknown: [{message: e.message}]});
       }
     }).catch(error => {
       // console.error(error);

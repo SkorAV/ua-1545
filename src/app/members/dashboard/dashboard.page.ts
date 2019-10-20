@@ -59,6 +59,8 @@ export class DashboardPage implements OnInit {
           event.target.complete();
         }
       } catch (e) { }
+    }).catch(error => {
+      console.log(error);
     }).finally(() => {
       this.loader.dismiss();
     });
