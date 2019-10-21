@@ -47,14 +47,13 @@
     <ion-item>
       <ion-list>
         <ion-item *ngFor="let f of files; index as i">
-          <ion-icon name="trash" (click)="removeFile(i)" slot="end"></ion-icon>
+          <ion-icon name="trash" (click)="removeFile(i)" slot="start"></ion-icon>
           {{f.name}}
         </ion-item>
       </ion-list>
     </ion-item>
     <section>
       <ion-button *ngIf="files.length < 5" expand="block" (click)="chooseFile()">Додати файли</ion-button>
-      <ion-text *ngIf="uploadError" color="danger">{{ uploadError }}</ion-text>
     </section>
     <ion-item>
       <ion-text><small>До звернення можливо долучити 5 файлів з допустимим розширенням: pdf, doc, docx, xls, xlsx, rtf, txt, jpeg , jpg, bmp, png, tiff. Розмір кожного файлу не повинен перевищувати 5Мб.</small></ion-text>

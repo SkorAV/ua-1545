@@ -9,6 +9,7 @@ import {FilePath} from '@ionic-native/file-path/ngx';
 import {Platform} from '@ionic/angular';
 import {FileInfo} from '../../models/file-info';
 import {LoadingService} from '../../services/loading.service';
+import {ToastController} from '@ionic/angular';
 
 @Component({
   selector: 'app-new-appeal',
@@ -21,7 +22,6 @@ export class NewAppealPage implements OnInit {
   public selectedLocation: AppealLocation;
   appealText = '';
   files: FileInfo[] = [];
-  uploadError: any = null;
   fileMaxSize = 5 * 1024 * 10024; // 5 Mb
 
   constructor(
@@ -31,7 +31,8 @@ export class NewAppealPage implements OnInit {
     private chooser: Chooser,
     private filepath: FilePath,
     private platform: Platform,
-    private loader: LoadingService
+    private loader: LoadingService,
+    public toast: ToastController
   ) {
   }
 
@@ -111,19 +112,31 @@ export class NewAppealPage implements OnInit {
     });
   }
 
+  showError(message) {
+    return this.toast.create({
+      message,
+      position: 'bottom',
+      color: 'danger',
+      duration: 5000
+    }).then(toast => {
+      return toast.present();
+    });
+  }
+
   chooseFile() {
     this.chooser.getFile().then((result) => {
       if (typeof result !== 'undefined') {
         this.processFile(result);
       }
     }).catch(error => {
-      this.processFile(error);
+      if (error && error.hasOwnProperty('name')) {
+        this.processFile(error);
+      }
     });
   }
 
   async processFile(data) {
-    this.uploadError = null;
-    console.log(data);
+    // console.log(data);
     let found = false;
     this.files.forEach(item => {
       if (item.name === data.name) {
@@ -149,12 +162,12 @@ export class NewAppealPage implements OnInit {
       'tiff'
     ];
     if (acceptTypes.indexOf(data.name.split('.').pop()) === -1) {
-      this.uploadError = 'Цей тип файлів не підтримується!';
+      this.showError('Цей тип файлів не підтримується!');
       return;
     }
 
     if (data.data.length > this.fileMaxSize) {
-      this.uploadError = 'Файл занадто великий! Оберіть файл розміром до 5 Мб.';
+      this.showError('Файл занадто великий! Оберіть файл розміром до 5 Мб.');
       return;
     }
 
@@ -164,20 +177,25 @@ export class NewAppealPage implements OnInit {
       path = await this.filepath.resolveNativePath(data.uri);
     }
 
-    console.log(path);
+    // console.log(path);
 
     this.loader.present({
       message: 'Завантаження файла на сервер...'
     });
     this.apiService.uploadFile(path).then(result => {
-      const parsedResponse = JSON.parse(result.response);
-      this.files.push({
-        name: data.name,
-        id: parsedResponse.image.id
-      } as FileInfo);
+      // console.log(result);
+      try {
+        const parsedResponse = JSON.parse(result.data);
+        this.files.push({
+          name: data.name,
+          id: parsedResponse.image.id
+        } as FileInfo);
+      } catch (e) {
+        this.showError('Сталася невідома помилка. Будь ласка, спробуйте ще!');
+      }
       this.loader.dismiss();
     }).catch(error => {
-      console.error(error);
+      // console.error(error);
       this.loader.dismiss();
     });
   }

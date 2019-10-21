@@ -10,43 +10,44 @@
   </ion-toolbar>
 </ion-header>
 
-<ion-content padding *ngIf="appeal">
-  <ion-item>
-    <ion-label>
-       <h3>Надіслано</h3>
-       <p>{{ apiService.formatDateTime(appeal?.created_at * 1000, 'yyyy/MM/dd HH:mm') }}</p>
-    </ion-label>
-  </ion-item>
-  <ion-item>
-    <ion-label>
-       <h3>Статус</h3>
-       <p>{{ appeal?.status }}</p>
-    </ion-label>
-  </ion-item>
-  <ion-item>
-    <ion-label>
+<ion-content padding>
+  <ion-list lines="none" *ngIf="appeal">
+    <ion-item>
+      <ion-label>
+        <h3>Надіслано</h3>
+        <p>{{ apiService.formatDateTime(appeal?.created_at * 1000, 'yyyy/MM/dd HH:mm') }}</p>
+      </ion-label>
+    </ion-item>
+    <ion-item>
+      <ion-label>
+        <h3>Статус</h3>
+        <p>{{ appeal?.status }}</p>
+      </ion-label>
+    </ion-item>
+    <ion-item>
+      <ion-label>
         <h3>Текст звернення</h3>
         <p class="ion-text-wrap">{{ appeal?.content }}</p>
-    </ion-label>
-  </ion-item>
-  <ion-item>
-    <ion-label>
+      </ion-label>
+    </ion-item>
+    <ion-item>
+      <ion-label>
         <h3>Відповідь</h3>
         <p class="ion-text-wrap">{{ appeal?.decision }}</p>
-    </ion-label>
-  </ion-item>
-  <ion-item *ngIf="appeal.documents.length > 0">
-    <ion-label>
-      <h3>Прикріплені файли</h3>
-      <p *ngFor="let file of appeal.documents">
-        <a (click)="show(file.url)" [routerLink]="router.url">{{file.name}}</a>
-      </p>
-    </ion-label>
-  </ion-item>
-
+      </ion-label>
+    </ion-item>
+    <ion-item *ngIf="appeal.documents.length > 0">
+      <ion-label>
+        <h3>Прикріплені файли</h3>
+        <p *ngFor="let file of appeal.documents">
+          <a (click)="show(file.url)" [routerLink]="router.url">{{file.name}}</a>
+        </p>
+      </ion-label>
+    </ion-item>
+  </ion-list>
   <ion-fab horizontal="end" vertical="bottom" slot="fixed">
     <ion-fab-button color="primary">
-        <ion-icon name="refresh" (click)="refresh()"></ion-icon>
+      <ion-icon name="refresh" (click)="refresh()"></ion-icon>
     </ion-fab-button>
   </ion-fab>
 </ion-content>

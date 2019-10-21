@@ -11,7 +11,6 @@ import { IonicStorageModule } from '@ionic/storage';
 import { InAppBrowser } from '@ionic-native/in-app-browser/ngx';
 import { Chooser } from '@ionic-native/chooser/ngx';
 import { FilePath } from '@ionic-native/file-path/ngx';
-import { FileTransfer } from '@ionic-native/file-transfer/ngx';
 import { AppVersion } from '@ionic-native/app-version/ngx';
 
 import {registerLocaleData} from '@angular/common';
@@ -40,7 +39,6 @@ registerLocaleData(localeUa, 'uk-UA', localeUaExtra);
     InAppBrowser,
     Chooser,
     FilePath,
-    FileTransfer,
     AppVersion
   ],
   bootstrap: [AppComponent]

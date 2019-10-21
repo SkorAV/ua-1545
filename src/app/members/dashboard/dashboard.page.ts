@@ -60,7 +60,7 @@ export class DashboardPage implements OnInit {
         }
       } catch (e) { }
     }).catch(error => {
-      console.log(error);
+      // console.log(error);
     }).finally(() => {
       this.loader.dismiss();
     });

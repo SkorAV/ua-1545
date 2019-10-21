@@ -6,7 +6,6 @@ import {Profile} from '../models/profile';
 import {formatDate} from '@angular/common';
 import {User} from '../models/user';
 import {HTTP} from '@ionic-native/http/ngx';
-import { FileTransfer, FileUploadOptions } from '@ionic-native/file-transfer/ngx';
 
 // storage keys
 const TOKEN_KEY = 'auth-token';
@@ -48,8 +47,7 @@ export class UkcApiService {
   constructor(
     private http: HTTP,
     public storage: Storage,
-    private plt: Platform,
-    private ft: FileTransfer
+    private plt: Platform
   ) {
     this.plt.ready().then(() => {
       this.http.setDataSerializer('json');
@@ -175,15 +173,8 @@ export class UkcApiService {
   }
 
   uploadFile(url: string) {
-    const fileName = url.substring(url.lastIndexOf('/') + 1);
-    const options: FileUploadOptions = {
-      fileKey: 'file',
-      fileName,
-      headers: this.headers
-    };
-    return this.ft
-      .create()
-      .upload(url, API_URL + UPLOAD_FILES, options);
+    return this.http
+      .uploadFile(API_URL + UPLOAD_FILES, {}, this.headers, encodeURI(url), 'file');
   }
 
   addAppeal(data: any) {
