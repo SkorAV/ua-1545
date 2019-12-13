@@ -18,21 +18,36 @@
     <ion-label position="stacked">
       <h3>Населений пункт, якого стосується питання</h3>
     </ion-label>
-    <ion-item>
-      <ion-textarea
-          #locationSelect
-          type="text"
-          debounce="500"
-          placeholder="Вкажіть населений пункт"
-          (ionChange)="getLocation($event); locationSelect.setFocus();"
-          [value]="getFullLocation(selectedLocation)"
-      ></ion-textarea>
-    </ion-item>
-    <ion-list lines="none" *ngIf="locations.length > 0">
-      <ion-item button *ngFor="let item of locations" (click)="selectLocation(item)">
-        <p>{{ getFullLocation(item) }}</p>
+    <div class="places-list-wrapper" id="wrapper">
+      <ion-item>
+        <ion-input
+            #locationSelect
+            type="text"
+            placeholder="Вкажіть населений пункт"
+            [value]="getFullLocation(selectedLocation)"
+            (ionBlur)="leaveLocationsInput(locationSelect)"
+            clearInput
+        ></ion-input>
+        <ion-button (click)="getLocation(locationSelect);" color="light">
+          <ion-icon name="search"></ion-icon>
+        </ion-button>
       </ion-item>
-    </ion-list>
+      <ion-list lines="none" *ngIf="searching && !nothingFound" class="places-list">
+        <ion-item text-center>
+          <ion-spinner></ion-spinner>
+        </ion-item>
+      </ion-list>
+      <ion-list lines="none" *ngIf="nothingFound" class="places-list">
+        <ion-item>
+          Нічого не знайдено
+        </ion-item>
+      </ion-list>
+      <ion-list lines="none" *ngIf="locations.length > 0" class="places-list">
+        <ion-item button *ngFor="let item of locations" (click)="selectLocation(item)">
+          <p>{{ getFullLocation(item) }}</p>
+        </ion-item>
+      </ion-list>
+    </div>
     <ion-label position="stacked">
       <h3>Текст звернення</h3>
     </ion-label>

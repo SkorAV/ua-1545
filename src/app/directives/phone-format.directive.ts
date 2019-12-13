@@ -1,5 +1,4 @@
 import {Directive, ElementRef, HostListener} from '@angular/core';
-import {RenderingFormatter} from '@angular/compiler-cli/ngcc/src/rendering/rendering_formatter';
 
 const FORMAT = '+380(__) ___-__-__';
 const MAX_LENGTH = 9;

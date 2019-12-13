@@ -1,5 +1,4 @@
-import {Component, OnInit} from '@angular/core';
-import {FormGroup} from '@angular/forms';
+import {Component, OnInit, ViewChild} from '@angular/core';
 import {Router} from '@angular/router';
 import {QuestionService} from './question/question.service';
 import {UkcApiService} from '../../services/ukc-api.service';
@@ -17,12 +16,14 @@ import {ToastController} from '@ionic/angular';
   styleUrls: ['./new-appeal.page.scss'],
 })
 export class NewAppealPage implements OnInit {
-  public form: FormGroup;
+  @ViewChild('locationSelect', {static: false}) locationSelect;
   public locations: AppealLocation[] = [];
   public selectedLocation: AppealLocation;
   appealText = '';
   files: FileInfo[] = [];
   fileMaxSize = 5 * 1024 * 10024; // 5 Mb
+  searching = false;
+  nothingFound = false;
 
   constructor(
     private router: Router,
@@ -43,14 +44,19 @@ export class NewAppealPage implements OnInit {
         this.question.setDefault();
       } catch (e) { }
     });
+    document.addEventListener('click', this.clickOutside.bind(this));
   }
 
   selectLevel1() {
     this.router.navigate(['/members/level1']);
   }
 
-  getLocation($event) {
-    const value = $event.detail.value;
+  getLocation(input) {
+    this.searching = true;
+    const value = input.value;
+    if (value.length < 2) {
+      return;
+    }
     if (value.indexOf(', ') > -1) {
       this.locations = [];
       return;
@@ -63,7 +69,12 @@ export class NewAppealPage implements OnInit {
       try {
         const data = JSON.parse(response.data);
         this.locations = data.collection;
+        this.nothingFound = this.locations.length === 0;
       } catch (e) { }
+    }).catch(() => {
+      this.locations = [];
+    }).finally(() => {
+      this.searching = false;
     });
   }
 
@@ -87,11 +98,19 @@ export class NewAppealPage implements OnInit {
   }
 
   selectLocation(item: AppealLocation) {
+    if (this.selectedLocation && this.selectedLocation.id === item.id) {
+      return;
+    }
     this.selectedLocation = item;
     this.locations = [];
   }
 
   sendAppeal() {
+    if (this.getFullLocation(this.selectedLocation) !== this.locationSelect.value) {
+      this.locationSelect.value = '';
+      this.selectedLocation = null;
+      return;
+    }
     const fileIds = [];
     this.files.map(value => {
       fileIds.push(value.id);
@@ -179,7 +198,7 @@ export class NewAppealPage implements OnInit {
 
     // console.log(path);
 
-    this.loader.present({
+    await this.loader.present({
       message: 'Завантаження файла на сервер...'
     });
     this.apiService.uploadFile(path).then(result => {
@@ -202,5 +221,20 @@ export class NewAppealPage implements OnInit {
 
   removeFile(index) {
     this.files.splice(index, 1);
+  }
+
+  leaveLocationsInput(input) {
+    if (input.value.length === 0) {
+      this.selectedLocation = null;
+    }
+  }
+
+  clickOutside(event) {
+    const wrapper = document.getElementById('wrapper');
+    if (!wrapper.contains(event.target.nativeElement)) {
+      this.locations = [];
+      this.searching = false;
+      this.nothingFound = false;
+    }
   }
 }

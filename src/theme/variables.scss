@@ -105,4 +105,17 @@
   ion-footer p {
     font-size: small;
   }
+  .places-list {
+    position: absolute;
+    display: block;
+    z-index: 999;
+    width: 100%;
+    max-height: 25vh;
+    border: 1px solid lightgrey;
+    overflow-y: auto;
+  }
+  .places-list-wrapper {
+    position: relative;
+    width: 100%;
+  }
 }

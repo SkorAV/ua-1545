@@ -48,7 +48,7 @@ export class ProfilePage implements OnInit {
   getGenderName(gender: string) {
     switch (gender) {
       case 'MALE':
-        return 'Чоловвік';
+        return 'Чоловік';
       case 'FEMALE':
         return 'Жінка';
     }
